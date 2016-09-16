@@ -1,0 +1,183 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_form_select</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_form_select</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:05:58 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_form_select, ml_form_select_set_size, ml_form_select_get_size, ml_form_select_set_multiple, ml_form_select_get_multiple, ml_form_select_push_back, ml_form_select_pop_back, ml_form_select_push_front, ml_form_select_pop_front, ml_form_select_get, ml_form_select_insert, ml_form_select_replace, ml_form_select_erase, ml_form_select_clear, ml_form_select_size, ml_form_select_set_selection, ml_form_select_set_selections, ml_form_select_get_selection, ml_form_select_get_selections - monolith form select box input widget</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_form_select.h&gt;
+
+ml_form_select new_ml_form_select (pool pool, ml_form form);
+void ml_form_select_set_size (ml_form_select w, int size);
+int ml_form_select_get_size (ml_form_select w);
+void ml_form_select_set_multiple (ml_form_select w, int multiple);
+int ml_form_select_get_multiple (ml_form_select w);
+void ml_form_select_push_back (ml_form_select w, const char *option);
+const char *ml_form_select_pop_back (ml_form_select w);
+void ml_form_select_push_front (ml_form_select w, const char *option);
+const char *ml_form_select_pop_front (ml_form_select w);
+const char *ml_form_select_get (ml_form_select w, int option_index);
+void ml_form_select_insert (ml_form_select w, int option_index, const char *option);
+void ml_form_select_replace (ml_form_select w, int option_index, const char *option);
+void ml_form_select_erase (ml_form_select w, int option_index);
+void ml_form_select_clear (ml_form_select w);
+int ml_form_select_size (ml_form_select w);
+void ml_form_select_set_selection (ml_form_select w, int option_index);
+void ml_form_select_set_selections (ml_form_select w, vector selected);
+int ml_form_select_get_selection (ml_form_select w);
+const vector ml_form_select_get_selections (ml_form_select w);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+This is a select box for use in forms. It can appear in
+several ways: either as a drop-down menu, or as a selection
+box allowing single or multiple options to be
+selected.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_form_select</b> creates a new form select box
+input widget. The form into which this widget is being
+embedded is passed as the <b>form</b> parameter. The select
+box is created with no options, in drop-down mode (size 0),
+single choice (multiple 0).</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_form_select_(set|get)_size</b> sets the size (number
+of rows) in the select box. If the size is 0, then the
+select box will be rendered as a drop-down menu. If the size
+is &gt; 0, then the select box will be rendered as a
+scrolling list of choices.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_form_select_(set|get)_multiple</b> sets the multiple
+boolean property of the select box. If this is false (the
+default), then only a single option can be selected. If this
+is true, then multiple options can be selected by the
+user.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+To add options to the select box, use the
+<b>ml_form_select_push_back</b> and other access functions.
+These are modelled on the c2lib <b>vector_*</b>
+functions.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+To choose which option is selected first in a single
+selection select box, call
+<b>ml_form_select_set_selection</b>. For select boxes which
+allow multiple selections, prepare a <b>vector</b> of
+<b>int</b> which is at least as long as the number of
+options. Each element of the vector should be a boolean
+value saying whether the corresponding option is selected or
+not. Pass this to
+<b>ml_form_select_set_selections</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+If the select box allows only single selections, then after
+the form has been submitted by the user, you can read back
+the index of the option which was selected using
+<b>ml_form_select_get_selection</b>. This returns -1 if
+nothing was selected.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+If the select box allows multiple selections, then call
+<b>ml_form_select_get_selections</b> which returns a vector
+of boolean values (<b>vector</b> of <b>int</b>) of exactly
+the same length as the number of options. This vector will
+contain true corresponding to every selected option. This
+function may also return <b>NULL</b>, indicating that
+nothing was selected (or the form wasn't
+submitted).</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<a name="SEE ALSO"></a>
+<h2>SEE ALSO</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_form(3)</b>, <b>ml_form_input_get_value(3)</b>,
+<b>vector_push_back(3)</b>, <b>vector_pop_back(3)</b>,
+<b>vector_push_front(3)</b>, <b>vector_pop_front(3)</b>,
+<b>vector_get(3)</b>, <b>vector_insert(3)</b>,
+<b>vector_replace(3)</b>, <b>vector_erase(3)</b>,
+<b>vector_clear(3)</b>, <b>vector_size(3)</b>.</td></table>
+<hr>
+</body>
+</html>

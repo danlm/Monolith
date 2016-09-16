@@ -1,0 +1,147 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_button</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_button</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:06:09 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_button, ml_button_set_text, ml_button_get_text, ml_button_set_callback, ml_button_set_key - monolith button widget</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_button.h&gt;
+
+ml_button new_ml_button (pool pool, const char *text);
+void ml_button_set_text (ml_button, const char *text);
+const char *ml_button_get_text (ml_button);
+void ml_button_set_callback (ml_button, void (*fn)(ml_session, void *), ml_session, void *);
+void ml_button_set_key (ml_button, int is_key);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+A button widget is a simple button which calls a function
+when clicked.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_button</b> creates a new button
+widget.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_button_(set|get)_text</b> updates the HTML text
+printed on the button. Note that the text string must be
+either static, or already allocated in the button's pool, or
+allocated in a pool with a longer lifetime than the button.
+If the text is set to <b>NULL</b> then this has the same
+effect as setting the text to the empty string, which is not
+very useful because the button can never be
+pressed.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_button_set_callback</b> updates the callback function
+which is invoked when the button is pressed.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_button_set_key</b> sets the boolean &quot;key&quot;
+property of the button. This should be set on buttons where
+the text is a single letter, suitable for, say, calculator
+keys. All key buttons are rendered at a fixed width of
+&quot;1em&quot;, resulting in a more pleasing overall
+effect.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_button_set_popup</b> sets the popup property of the
+button. When the user clicks on a popup button, a new popup
+window opens on the screen. To make a button into a popup
+button, the popup property should be a non-<b>NULL</b>
+string which is the name of the new browser window (note
+that because of limitations in HTML, browser window names
+are global, so it is recommended that names be
+&quot;<b>appname</b>_<b>name</b>&quot;). To change a popup
+button back to an ordinary button, set the popup property to
+<b>NULL</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+The callback used by a popup button must create a top-level
+window, otherwise you will get an internal server
+error.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_button_set_popup_size</b> changes the size of the
+popup window. The default is width 0, height 0, which
+usually creates a popup window which is the same size and
+shape as the current browser window.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<hr>
+</body>
+</html>

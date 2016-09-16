@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_image</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_image</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:06:03 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_image, ml_image_set_src, ml_image_get_src - monolith image widget</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_image.h&gt;
+
+ml_image new_ml_image (pool pool, const char *src);
+void ml_image_set_src (ml_image, const char *src);
+const char *ml_image_get_src (ml_image);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+An image widget displays a graphical image, taken from a
+particular source (in fact, it corresponds almost exactly to
+the HTML <b>&lt;img/&gt;</b> element).</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+The current implementation of <b>ml_image</b> is rather
+immature. In future we will support image sizes, alt, title,
+longdesc, and so on.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_image</b> creates a new image. You should supply
+the <b>src</b> (source) for the image, which is an absolute
+or relative link. If <b>src</b> is set to <b>NULL</b> then
+no image is displayed.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_image_(set|get)_src</b> updates the source of the
+image. You may set the source to <b>NULL</b> to display no
+image at all.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<hr>
+</body>
+</html>

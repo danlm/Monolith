@@ -1,0 +1,105 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_form_radio_group</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_form_radio_group</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:05:57 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_form_radio_group, ml_form_radio_group_pack - monolith group of radio buttons widget</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_form_radio_group.h&gt;
+
+ml_form_radio_group new_ml_form_radio_group (pool pool, ml_form form);
+void ml_form_radio_group_pack (ml_form_radio_group w, ml_widget);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+A radio group is a widget which contains a group of related
+radio buttons. You cannot use radio buttons
+&quot;naked&quot; in a form, but instead must embed related
+buttons inside one of these widgets.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_form_radio_group</b> creates a new group
+widget.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_form_radio_group_pack</b> packs a single widget inside
+the radio group widget. A radio group can only contain a
+single widget, so if you call pack again, it will forget the
+previous widget. It is recommended that you pack either a
+flow layout or a table layout directly inside the radio
+group, and then pack the actual radio buttons inside
+that.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<a name="SEE ALSO"></a>
+<h2>SEE ALSO</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_form(3)</b>, <b>new_ml_form_radio(3)</b>,
+<b>ml_form_input_get_value(3)</b>.</td></table>
+<hr>
+</body>
+</html>

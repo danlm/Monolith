@@ -1,0 +1,86 @@
+Monolith (C) Copyright 2000-2002 Richard W.M. Jones <rich@annexia.org>
+
+Monolith is distributed under the terms of the GNU Library GPL. See
+the accompanying file COPYING.LIB for details.
+
+Please see doc/index.html for full documentation and a tutorial.
+
+Installing Monolith
+-------------------
+
+You first need to install the following components, in the order
+listed below:
+
+0. cdoc    from http://www.annexia.org/freeware/c2lib/ (optional)
+1. c2lib   from http://www.annexia.org/freeware/c2lib/
+2. pthrlib from http://www.annexia.org/freeware/pthrlib/
+3. rws     from http://www.annexia.org/freeware/rws/
+
+Make sure you have the latest versions of these packages. Older
+versions may not work correctly.
+
+Built it:
+
+	./configure --sysconfdir=/etc
+	make
+	make check
+
+Install it (as root):
+
+	make install
+
+You will now need to configure rws. The configuration files for rws
+are normally located in the /etc/rws/ directory.
+
+For the /etc/rws/rws.conf file, just use the example one supplied with
+rws. You can modify it if you want, but I didn't.
+
+Now create a /etc/rws/hosts/localhost file which should contain:
+
+	alias /
+	        # Path to the document root. NOTE you will
+	        # definitely want to change this!
+	        path:           /var/www
+	        show:           1
+	        list:           1
+	end alias
+
+	alias /so-bin/
+	        path:           /usr/local/share/monolith/so-bin
+	        exec so:        1
+	end alias
+
+	alias /ml-styles/
+	        path:           /usr/local/share/monolith/ml-styles
+	        show:           1
+	end alias
+
+These are the default locations for the files if you installed
+Monolith with --prefix=/usr/local, but you may need to change these if
+you installed with another prefix.
+
+Create symbolic links as necessary to your localhost file:
+
+	cd /etc/rws/hosts
+	ln -s localhost:8080 localhost
+	ln -s www.example.com localhost
+
+etc.
+
+Now, start up rws (as root, of course):
+
+	/usr/local/sbin/rwsd -C /etc/rws -p 8080
+
+Fire up a browser and point it at
+
+	http://localhost:8080/so-bin/01_label_and_button.so
+
+Errors will be displayed in the error log (/tmp/error_log or
+/var/log/httpd/error_log).
+
+If the button doesn't appear as a white square surrounded by a black
+rectangle, then the stylesheet is not being found. Make sure you set
+up the /ml-styles/ alias correctly.
+
+Monolith installs other example programs. Look in the examples/
+directory for a full list.

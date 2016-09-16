@@ -1,0 +1,102 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>ml_register_action</title>
+</head>
+<body>
+
+<h1 align=center>ml_register_action</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:06:03 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+ml_register_action, ml_unregister_action - register callbacks</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;monolith.h&gt;
+
+const char *ml_register_action (ml_session session, void (*callback_fn) (ml_session, void *), void *data);
+void ml_unregister_action (ml_session session, const char *action_id);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Widgets such as buttons may register actions (callback
+functions) to be run when a user clicks a button or submits
+a form. Each action is associated with a unique action ID (a
+string). A separate set of actions is registered within each
+session. The callback function is invoked as <b>void
+callback_fn (ml_session session, void
+*data)</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_register_action</b> registers an action within a given
+session and returns the action ID string.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_unregister_action</b> unregisters an
+action.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<a name="SEE ALSO"></a>
+<h2>SEE ALSO</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_button(3)</b>.</td></table>
+<hr>
+</body>
+</html>

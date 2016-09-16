@@ -1,0 +1,124 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_flow_layout</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_flow_layout</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:06:10 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_flow_layout, ml_flow_layout_push_back, ml_flow_layout_pop_back, ml_flow_layout_push_front, ml_flow_layout_pop_front, ml_flow_layout_get, ml_flow_layout_insert, ml_flow_layout_replace, ml_flow_layout_erase, ml_flow_layout_clear, ml_flow_layout_size, ml_flow_layout_pack - monolith flow_layout widget</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_flow_layout.h&gt;
+
+ml_flow_layout new_ml_flow_layout (pool pool);
+void ml_flow_layout_push_back (ml_flow_layout, ml_widget);
+ml_widget ml_flow_layout_pop_back (ml_flow_layout);
+void ml_flow_layout_push_front (ml_flow_layout, ml_widget);
+ml_widget ml_flow_layout_pop_front (ml_flow_layout);
+ml_widget ml_flow_layout_get (ml_flow_layout, int i);
+void ml_flow_layout_insert (ml_flow_layout, int i, ml_widget);
+void ml_flow_layout_replace (ml_flow_layout, int i, ml_widget);
+void ml_flow_layout_erase (ml_flow_layout, int i);
+void ml_flow_layout_clear (ml_flow_layout);
+int ml_flow_layout_size (ml_flow_layout);
+void ml_flow_layout_pack (ml_flow_layout, ml_widget);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+A flow layout widget is the simplest type of layout widget.
+It contains an ordered list of widgets, and it simply
+arranges them one after another (in other words with no
+&quot;layout&quot; at all).</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_flow_layout</b> creates a new flow layout
+widget.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Underlying the flow layout widget is a simple c2lib vector,
+and the other access functions use the same notation as the
+equivalent c2lib <b>vector_*</b> functions. Go to the SEE
+ALSO section below to see how to manipulate widgets within a
+flow layout.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_flow_layout_pack</b> is equivalent to
+<b>ml_flow_layout_push_back</b>: it appends the widget to
+the end of the current vector of widgets.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<a name="SEE ALSO"></a>
+<h2>SEE ALSO</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>vector_push_back(3)</b>, <b>vector_pop_back(3)</b>,
+<b>vector_push_front(3)</b>, <b>vector_pop_front(3)</b>,
+<b>vector_get(3)</b>, <b>vector_insert(3)</b>,
+<b>vector_replace(3)</b>, <b>vector_erase(3)</b>,
+<b>vector_clear(3)</b>, <b>vector_size(3)</b>.</td></table>
+<hr>
+</body>
+</html>

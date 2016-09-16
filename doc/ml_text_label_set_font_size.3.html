@@ -1,0 +1,138 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_text_label</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_text_label</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:06:06 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_text_label, ml_text_label_set_text_align, ml_text_label_set_font_weight, ml_text_label_set_font_size, ml_text_label_set_text - monolith text label widget</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_text_label.h&gt;
+
+ml_text_label new_ml_text_label (pool, const char *text);
+void ml_text_label_set_text_align (ml_text_label, const char *);
+void ml_text_label_set_font_weight (ml_text_label, const char *);
+void ml_text_label_set_font_size (ml_text_label, const char *);
+void ml_text_label_set_text (ml_text_label, const char *);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Text labels are simple strings or paragraphs of text. Unlike
+the <b>ml_label</b> widget, HTML sequences are escaped
+before being sent to the browser, so <b>ml_text_label</b>s
+can contain <b>&lt;</b>, <b>&gt;</b>, <b>&amp;</b> and so on
+and these will be displayed correctly.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Text labels allow control over the style, size and other
+aspects of how the text appears.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_text_label</b> creates a new text label
+widget.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_text_label_set_text_align</b> sets the text-align
+style of the text label. Common alignments are
+<b>&quot;left&quot;</b>, <b>&quot;right&quot;</b> and
+<b>&quot;justify&quot;</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_text_label_set_font_weight</b> sets the font-weight
+style of the text label. Common weights are
+<b>&quot;normal&quot;</b> and
+<b>&quot;bold&quot;</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_text_label_set_font_size</b> sets the font-size style
+of the text label. Common sizes are
+<b>&quot;small&quot;</b>, <b>&quot;medium&quot;</b> and
+<b>&quot;large&quot;</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_text_label_(set|get)_text</b> updates the text
+displayed on the label.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<a name="SEE ALSO"></a>
+<h2>SEE ALSO</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_widget(3)</b>, W3C CSS2
+recommendation.</td></table>
+<hr>
+</body>
+</html>

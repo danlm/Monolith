@@ -1,0 +1,142 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_table_layout</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_table_layout</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:06:13 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_table_layout, ml_table_layout_pack, ml_table_layout_set_colspan, ml_table_layout_set_rowspan, ml_table_layout_set_align, ml_table_layout_set_valign - monolith table layout widget</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_table_layout.h&gt;
+
+ml_table_layout new_ml_table_layout (pool, int rows, int cols);
+void ml_table_layout_pack (ml_table_layout, ml_widget, int row, int col);
+void ml_table_layout_set_colspan (ml_table_layout, int row, int col, int colspan);
+void ml_table_layout_set_rowspan (ml_table_layout, int row, int col, int rowspan);
+void ml_table_layout_set_align (ml_table_layout, int row, int col, const char *align);
+void ml_table_layout_set_valign (ml_table_layout, int row, int col, const char *valign);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+The monolith table layout widget is a very powerful layout
+tool. It is modelled on, and indeed implemented using, HTML
+&lt;table&gt;s. Table layouts are grids of widgets with a
+fixed number of rows and columns. Each widget normally
+occupies a single cell of the table, but widgets may occupy
+a rectangle of several adjacent cells. All cells in the
+table are referenced using the row and column number, with
+row and column numbers starting from zero.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_table_layout</b> creates a new table layout widget
+with <b>rows</b> cells across and <b>cols</b> cells down.
+The cells are numbered <b>0 .. rows-1</b> across and code{0
+.. cols-1} down.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_table_layout_pack</b> packs a widget at position
+<b>(row,col)</b> within the table. To remove a widget and
+leave a cell empty, pack a <b>NULL</b> widget.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_table_layout_set_colspan</b> and
+<b>ml_table_layout_set_rowspan</b> set the column span and
+row span for a particular table cell respectively. The
+col/row-span allow a cell to occupy one or more adjacent
+cells in the table (any widgets packed in those adjacent
+cells are silently ignored). The default column and row span
+for every cell is 1.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_table_layout_set_align</b> sets the horizontal
+alignment for the content of a cell. The possibilities are
+<b>&quot;left&quot;</b>, <b>&quot;center&quot;</b> or
+<b>&quot;right&quot;</b>, with the default being
+left-aligned.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_table_layout_set_valign</b> sets the vertical
+alignment for the content of a cell. The possibilities are
+<b>&quot;top&quot;</b>, <b>&quot;middle&quot;</b> or
+<b>&quot;bottom&quot;</b>, with the default being
+middle.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<a name="SEE ALSO"></a>
+<h2>SEE ALSO</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_widget(3)</b>.</td></table>
+<hr>
+</body>
+</html>

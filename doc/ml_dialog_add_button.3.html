@@ -1,0 +1,161 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_dialog</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_dialog</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:05:51 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_dialog, ml_dialog_set_text, ml_dialog_get_text, ml_dialog_set_title, ml_dialog_get_title, ml_dialog_set_icon, ml_dialog_get_icon, ml_dialog_clear_buttons, ml_dialog_add_button - monolith dialog widget</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_dialog.h&gt;
+
+ml_dialog new_ml_dialog (pool pool);
+void ml_dialog_set_text (ml_dialog, const char *text);
+const char *ml_dialog_get_text (ml_dialog);
+void ml_dialog_set_title (ml_dialog, const char *title);
+const char *ml_dialog_get_title (ml_dialog);
+void ml_dialog_set_icon (ml_dialog, const char *icon);
+const char *ml_dialog_get_icon (ml_dialog);
+void ml_dialog_clear_buttons (ml_dialog);
+void ml_dialog_add_button (ml_dialog, const char *text, void (*callback_fn) (ml_session, void *), ml_session session, void *data);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+A dialog is a widget for asking a user a question, and
+getting an answer. It can also be used for presenting the
+user with confirmation that some operation has been carried
+out, or for presenting the user with an error
+message.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Fundamentally, a dialog consists of some text, and a series
+of zero or more buttons along the bottom of the widget. A
+dialog can also have an optional title which appears along
+the top and an optional icon which appears on the left of
+the window.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Dialogs are almost always used packed directly into a
+window.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Dialogs are actually &quot;super-widgets&quot;, built up
+from fundamental widgets like labels, buttons, and table
+layouts. However currently none of the fundamental widgets
+are actually exposed through the <b>ml_dialog_*</b>
+interface.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_dialog</b> creates a new dialog widget with no
+text, no title, no icon and no buttons (ie. not very useful!
+- after calling this you should immediately call
+<b>ml_dialog_set_text</b> and probably
+<b>ml_dialog_add_button</b> too).</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_dialog_(set|get)_text</b> updates the text in a dialog
+widget. Although having text is not strictly mandatory, it
+is highly advisable.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_dialog_(set|get)_title</b> changes the title. To have
+no title, set the title to <b>NULL</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_dialog_(set|get)_icon</b> changes the icon. To have no
+icon, set the icon to <b>NULL</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_dialog_clear_buttons</b> removes all the buttons from
+the dialog.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_dialog_add_button</b> adds a single button to the
+dialog. If there are already buttons attached to the dialog,
+then this adds the new button on the right. The <b>text</b>
+which appears on the button must be specified. When the
+button is pressed, <b>callback_fn</b> will be
+called.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<hr>
+</body>
+</html>

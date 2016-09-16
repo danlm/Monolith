@@ -1,0 +1,50 @@
+monolith/apps directory
+-----------------------
+
+msp - monolith server pages
+---------------------------
+
+MSPs (".msp" files) are HTML files with additional mark-up. The main
+benefit is that they allow you to embed working monolith widgets into
+existing HTML pages.
+
+The current implementation of MSPs should be regarded as very much
+"version 0.1". We will probably rewrite it from scratch when we have
+time to use something which looks a lot more like XML. However, the
+current version is usable; indeed http://www.annexia.org/ is built
+using MSPs.
+
+The msp app contained in this directory is just a wrapper around the
+ml_msp widget which can be found in the ../widgets/ directory. For
+full documentation on writing MSP files, look at the new_ml_msp(3)
+manual page.
+
+To use MSPs, add the following to your /etc/rws/hosts/<hostname> file:
+
+begin rewrite
+^/(.*\.msp)$    /so-bin/msp.so?page=$1  last,qsa
+^/$             /index.msp              qsa,external
+^/(.*)/$        /$1/index.msp           qsa,external
+end rewrite
+
+msp root:       <document root directory>
+msp database:   dbname=<name of the database>
+
+stats - monolith statistics/debugging application
+-------------------------------------------------
+
+The stats interface allows you to browse around the internals of a
+running rws/monolith server, displaying structures and updating them
+in real time. It can be quite useful for debugging.
+
+For security reasons, this application does not install itself by
+default. You need to manually copy the stats.so file to
+/usr/share/rws/so-bin, and make sure it is mode 0755. You should also
+consider NOT installing this on live servers - at least until rws
+supports access control. This is because the sensitive internal
+information revealed by stats might make it easier for a cracker to
+break into your system.
+
+To run the stats application, point your browser at
+http://yourhostname/so-bin/stats.so . It should be self-explanatory
+from there on.

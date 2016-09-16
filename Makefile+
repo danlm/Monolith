@@ -1,0 +1,569 @@
+# -*- Makefile -*-
+#
+# This is a make+ file. Make+ is a set of scripts which enhance GNU
+# make and let you build RPMs, and other package types with just one
+# control file.  To build this package you will need to download make+
+# from this site: http://www.annexia.org/freeware/makeplus/
+
+PACKAGE		:= monolith
+VERSION_MAJOR	:= 1
+VERSION_MINOR 	:= 2.0
+VERSION		:= $(VERSION_MAJOR).$(VERSION_MINOR)
+
+SUMMARY		:= a framework for web applications
+COPYRIGHT	:= GNU LGPL
+AUTHOR		:= Richard W.M. Jones <rich@annexia.org>
+
+define DESCRIPTION
+Monolith is a framework for web applications. Instead of thinking of
+your web application as a series of pages and forms, Monolith gives
+you basic widgets like buttons, images, form fields, tables and so on,
+which you can use to build up your web application or construct
+reusable "super-widgets". In this way, building a web application is
+rather like constructing a traditional GUI application using Gtk,
+Motif, Windows/MFC, Java/JFC, etc.
+
+Monolith applications are written in C or C++ (we may support other
+languages in future, particularly Perl and Java).
+
+Monolith applications compile down to standalone shared object scripts
+which can be run directly from the rws micro web server.
+endef
+
+RPM_REQUIRES	:= rws >= 1.1.0, pthrlib >= 3.2.0, c2lib >= 1.3.0
+RPM_GROUP	:= Development/Libraries
+
+iconsdir	= $(datadir)/rws/ml-icons
+solibdir	= $(datadir)/rws/so-bin
+sqldir		= $(datadir)/rws/sql
+styledir	= $(datadir)/rws/ml-styles
+symtabsdir	= $(datadir)/rws/symtabs
+
+CFLAGS		+= -Wall -Werror -g -O2 -I$(srcdir)/src -I$(srcdir)/widgets \
+		   -DSYMTABSDIR=\"$(symtabsdir)\" -D_GNU_SOURCE \
+		   -I$(includedir)/c2lib
+ifneq ($(shell uname), SunOS)
+# Avoid a warning about reordering system include paths.
+CFLAGS		+= $(shell pcre-config --cflags)
+endif
+
+LIBS		+= -lrws -lpthrlib -lc2lib -lpq $(shell pcre-config --libs) -lm
+
+OBJS	:= src/ml_smarttext.o \
+	   src/text.o \
+	   src/monolith.o \
+	   src/ml_box.o \
+	   src/ml_button.o \
+	   src/ml_close_button.o \
+	   src/ml_dialog.o \
+	   src/ml_flow_layout.o \
+	   src/ml_form.o \
+	   src/ml_form_checkbox.o \
+	   src/ml_form_input.o \
+	   src/ml_form_layout.o \
+	   src/ml_form_password.o \
+	   src/ml_form_radio.o \
+	   src/ml_form_radio_group.o \
+	   src/ml_form_select.o \
+	   src/ml_form_submit.o \
+	   src/ml_form_text.o \
+	   src/ml_form_textarea.o \
+	   src/ml_heading.o \
+	   src/ml_horizontal_layout.o \
+	   src/ml_iframe.o \
+	   src/ml_image.o \
+	   src/ml_label.o \
+	   src/ml_menu.o \
+	   src/ml_multicol_layout.o \
+	   src/ml_select_layout.o \
+	   src/ml_table_layout.o \
+	   src/ml_text_label.o \
+	   src/ml_toggle_button.o\
+	   src/ml_vertical_layout.o \
+	   src/ml_widget.o \
+	   src/ml_window.o
+LOBJS	:= $(OBJS:.o=.lo)
+
+HEADERS	:= $(srcdir)/src/ml_smarttext.h \
+	   $(srcdir)/src/monolith.h \
+	   $(srcdir)/src/ml_box.h \
+	   $(srcdir)/src/ml_button.h \
+	   $(srcdir)/src/ml_close_button.h \
+	   $(srcdir)/src/ml_dialog.h \
+	   $(srcdir)/src/ml_flow_layout.h \
+	   $(srcdir)/src/ml_form.h \
+	   $(srcdir)/src/ml_form_checkbox.h \
+	   $(srcdir)/src/ml_form_input.h \
+	   $(srcdir)/src/ml_form_layout.h \
+	   $(srcdir)/src/ml_form_password.h \
+	   $(srcdir)/src/ml_form_radio.h \
+	   $(srcdir)/src/ml_form_radio_group.h \
+	   $(srcdir)/src/ml_form_select.h \
+	   $(srcdir)/src/ml_form_submit.h \
+	   $(srcdir)/src/ml_form_text.h \
+	   $(srcdir)/src/ml_form_textarea.h \
+	   $(srcdir)/src/ml_heading.h \
+	   $(srcdir)/src/ml_horizontal_layout.h \
+	   $(srcdir)/src/ml_iframe.h \
+	   $(srcdir)/src/ml_image.h \
+	   $(srcdir)/src/ml_label.h \
+	   $(srcdir)/src/ml_menu.h \
+	   $(srcdir)/src/ml_multicol_layout.h \
+	   $(srcdir)/src/ml_select_layout.h \
+	   $(srcdir)/src/ml_table_layout.h \
+	   $(srcdir)/src/ml_text_label.h \
+	   $(srcdir)/src/ml_toggle_button.h \
+	   $(srcdir)/src/ml_vertical_layout.h \
+	   $(srcdir)/src/ml_widget.h \
+	   $(srcdir)/src/ml_window.h
+
+WIDGETS_OBJS := widgets/ml_bulletins.o \
+	        widgets/ml_login_nopw.o \
+	        widgets/ml_msp.o \
+	        widgets/ml_user_directory.o
+WIDGETS_LOBJS := $(WIDGETS_OBJS:.o=.lo)
+
+WIDGETS_HEADERS := $(srcdir)/widgets/ml_bulletins.h \
+		   $(srcdir)/widgets/ml_login_nopw.h \
+		   $(srcdir)/widgets/ml_msp.h \
+		   $(srcdir)/widgets/ml_user_directory.h
+
+APPS	:= apps/msp.so apps/stats.so
+
+EXAMPLES := examples/01_label_and_button.so examples/02_toy_calculator.so \
+	examples/03_many_toy_calculators.so \
+	examples/04_animal_vegetable_mineral.so \
+	examples/05_popup_windows_and_frames.so \
+	examples/06_big_form.so examples/07_toggle_buttons.so \
+	examples/08_menus.so
+
+all:	build
+
+# XXX Test for flex.
+configure:
+	$(MP_CONFIGURE_START)
+	$(MP_CHECK_LIB) precomp c2
+	$(MP_CHECK_LIB) current_pth pthrlib
+	$(MP_CHECK_LIB) new_rws_request rws
+	$(MP_CHECK_FUNCS) dladdr
+	$(MP_CHECK_HEADERS) arpa/inet.h assert.h dlfcn.h fcntl.h \
+	netinet/in.h string.h sys/socket.h sys/types.h time.h unistd.h
+	$(MP_CONFIGURE_END)
+
+build:	src/libmonolithcore.so widgets/libmonolithwidgets.so \
+	$(APPS) $(EXAMPLES) \
+	manpages syms
+
+# Build the core library.
+
+src/libmonolithcore.so: $(LOBJS)
+	$(MP_LINK_DYNAMIC) $@ $^ $(LIBS)
+
+src/%.o: src/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+src/%.lo: src/%.c
+	$(CC) $(CFLAGS) -fPIC -c $< -o $@
+
+src/ml_smarttext.c: src/ml_smarttext.l
+	flex -B -8 -Cem -Pml_smarttext_ -i $<
+	mv lex.ml_smarttext_.c $@
+
+# Build the widgets library.
+
+widgets/libmonolithwidgets.so: $(WIDGETS_LOBJS)
+	$(MP_LINK_DYNAMIC) $@ $^ $(LIBS)
+
+widgets/%.o: widgets/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Build the applications.
+
+apps/%.so: apps/%.lo
+ifneq ($(shell uname), SunOS)
+	$(CC) $(CFLAGS) -shared -Wl,-soname,$@ $^ \
+	-Lwidgets -lmonolithwidgets -Lsrc -lmonolithcore $(LIBS) -o $@
+else
+# XXX make+ needs to support this.
+	$(CC) $(CFLAGS) -shared -Wl,-h,$@ $^ \
+	-Lwidgets -lmonolithwidgets -Lsrc -lmonolithcore $(LIBS) -o $@
+endif
+
+# Build the example programs.
+
+examples/03_many_toy_calculators.so: examples/03_many_toy_calculators.lo \
+	examples/toy_calculator.lo
+ifneq ($(shell uname), SunOS)
+	$(CC) $(CFLAGS) -shared -Wl,-soname,$@ $^ \
+	-Lwidgets -lmonolithwidgets -Lsrc -lmonolithcore $(LIBS) -o $@
+else
+# XXX make+ needs to support this.
+	$(CC) $(CFLAGS) -shared -Wl,-h,$@ $^ \
+	-Lwidgets -lmonolithwidgets -Lsrc -lmonolithcore $(LIBS) -o $@
+endif
+
+ifeq ($(shell uname), OpenBSD)
+# .. This is required for unknown reasons by OpenBSD.
+examples/04_animal_vegetable_mineral.so: \
+	examples/04_animal_vegetable_mineral.lo
+	$(CC) $(CFLAGS) -shared $^ \
+	-Lwidgets -lmonolithwidgets -Lsrc -lmonolithcore $(LIBS) -o $@
+endif
+
+examples/%.so: examples/%.lo
+ifneq ($(shell uname), SunOS)
+	$(CC) $(CFLAGS) -shared -Wl,-soname,$@ $^ \
+	-Lwidgets -lmonolithwidgets -Lsrc -lmonolithcore $(LIBS) -o $@
+else
+# XXX make+ needs to support this.
+	$(CC) $(CFLAGS) -shared -Wl,-h,$@ $^ \
+	-Lwidgets -lmonolithwidgets -Lsrc -lmonolithcore $(LIBS) -o $@
+endif
+
+# Build all the manpages.
+
+manpages: $(srcdir)/src/*.h $(srcdir)/widgets/*.h
+	if cdoc; then \
+		rm -f *.3; \
+		cdoc \
+			--author '$(AUTHOR)' \
+			--license '$(COPYRIGHT)' \
+			--version '$(PACKAGE)-$(VERSION)' \
+			$^; \
+	fi
+
+# Build all the symbol tables.
+
+syms:	src/libmonolithcore.syms widgets/libmonolithwidgets.syms \
+	apps_syms examples_syms
+
+src/libmonolithcore.syms: src/libmonolithcore.so
+	nm $< | sort | grep -i '^[0-9a-f]' | awk '{print $$1 " " $$3}' > $@
+
+widgets/libmonolithwidgets.syms: widgets/libmonolithwidgets.so
+	nm $< | sort | grep -i '^[0-9a-f]' | awk '{print $$1 " " $$3}' > $@
+
+apps_syms: $(patsubst %.so,%.syms,$(APPS))
+
+apps/%.syms: apps/%.so
+	nm $< | sort | grep -i '^[0-9a-f]' | awk '{print $$1 " " $$3}' > $@
+
+examples_syms: $(patsubst %.so,%.syms,$(EXAMPLES))
+
+examples/%.syms: examples/%.so
+	nm $< | sort | grep -i '^[0-9a-f]' | awk '{print $$1 " " $$3}' > $@
+
+test:
+
+install:
+	install -d $(DESTDIR)$(libdir)
+	install -d $(DESTDIR)$(includedir)
+	install -d $(DESTDIR)$(iconsdir)
+	install -d $(DESTDIR)$(man3dir)
+	install -d $(DESTDIR)$(solibdir)
+	install -d $(DESTDIR)$(sqldir)
+	install -d $(DESTDIR)$(styledir)
+	install -d $(DESTDIR)$(symtabsdir)
+
+	$(MP_INSTALL_DYNAMIC_LIB) src/libmonolithcore.so
+	$(MP_INSTALL_DYNAMIC_LIB) widgets/libmonolithwidgets.so
+	install -m 0644 $(HEADERS) $(WIDGETS_HEADERS) $(DESTDIR)$(includedir)
+	install -m 0644 $(srcdir)/icons/*.png $(DESTDIR)$(iconsdir)
+	install -m 0644 *.3 $(DESTDIR)$(man3dir)
+	install -m 0755 $(APPS) $(EXAMPLES) $(DESTDIR)$(solibdir)
+	install -m 0644 $(srcdir)/sql/*.sql $(DESTDIR)$(sqldir)
+	install -m 0644 $(srcdir)/default.css $(DESTDIR)$(styledir)
+	install -m 0644 */*.syms $(DESTDIR)$(symtabsdir)
+
+define WEBSITE
+<% include page_header.msp %>
+    <h1>$(PACKAGE) - $(SUMMARY)</h1>
+
+    <p>
+      Monolith is a framework for web applications. Instead of
+      thinking of your web application as a series of pages and forms,
+      Monolith gives you basic widgets like buttons, images, form
+      fields, tables and so on, which you can use to build up your web
+      application or construct reusable <q>super-widgets</q>. In this
+      way, building a web application is rather like constructing a
+      traditional GUI application using Gtk, Motif, Windows/MFC,
+      Java/JFC, etc.
+    </p>
+
+    <p>
+      Monolith applications are written in C or C++ (we may
+      support other languages in future, particularly Perl and Java).
+    </p>
+
+    <p>
+      Monolith applications compile down to standalone shared
+      object scripts which can be run directly from the
+      <a href="../rws/">rws micro web server</a>.
+    </p>
+
+    <p>
+      <a href="doc/">There is extensive documentation and
+	a tutorial here.</a>
+    </p>
+
+    <h1>Download</h1>
+
+    <p>
+      You will need to install the complete tool-chain before
+      installing monolith:
+    </p>
+
+    <ul>
+      <li> <a href="../c2lib/">c2lib</a> - a Perl/STL-like
+	library of basics for C
+      <li> <a href="../pthrlib/">pthrlib</a> - a library for
+	writing small, fast and efficient servers in C
+      <li> <a href="../rws/">rws</a> - a small, fast webserver
+    </ul>
+
+    <p>
+      Always make sure you have the latest versions installed!
+    </p>
+
+    <table border="1">
+      <tr>
+	<th> File </th>
+	<th> Format </th>
+	<th> Contents </th>
+      </tr>
+      <tr>
+	<td> <a href="$(PACKAGE)-$(VERSION).tar.gz">$(PACKAGE)-$(VERSION).tar.gz</a> </td>
+	<td> tar.gz </td>
+	<td> Latest source distribution </td>
+      </tr>
+      <tr>
+	<td> <a href="$(PACKAGE)-$(VERSION)-1.i686.rpm">$(PACKAGE)-$(VERSION)-1.i686.rpm</a> </td>
+	<td> i686 binary RPM </td>
+	<td> Binary libraries, header files, man pages
+	  for Red Hat Linux </td>
+      </tr>
+      <tr>
+	<td> <a href="$(PACKAGE)-$(VERSION)-1.src.rpm">$(PACKAGE)-$(VERSION)-1.src.rpm</a> </td>
+	<td> source RPM </td>
+	<td> Source files for Red Hat Linux </td>
+      </tr>
+    </table>
+
+    <p>
+      Note: To rebuild the manual pages which come with the
+      package, you will also need to download
+      <a href="../c2lib/">cdoc &gt;= 0.9.2</a> (this is
+      optional).
+    </p>
+
+    <h2>News</h2>
+
+<p>
+<b>Sat Feb  8 17:00:47 GMT 2003:</b>
+Ported to Solaris, OpenBSD and FreeBSD (thanks to
+<a href="http://www.azazel.net/">Jeremy Sowden</a>
+and <a href="http://www.mondaymorning.org/">Richard Baker</a>
+for help and equipment).
+Removed all non-shared libraries. Allow uses to
+set <code>class</code> on <code>div</code> elements.
+Fixed many string escaping bugs. Fixed spelling mistakes
+in the documentation. Updated CSS for the bugtracker.
+</p>
+
+	<p>
+	<b>Sun Dec  8 17:23:47 GMT 2002:</b>
+	Builds using <a href="../makeplus/">make+</a>.
+	Fixes to compile on RH 7.3. Changed to support
+	<code>current_pth</code> API change in
+	<code>pthrlib</code>.
+	<code>ml_login_nopw</code> acts more conservatively
+	with email addresses, possibly closing a security
+	hole. Added <code>ml_select_layout</code>. Made
+	the button widget more memory efficient.
+	Allow widgets to widget properties. Changes to
+	the stylesheet for discussion. Enabled debugging
+	and optimisations. <code>ml_window</code> supports
+	browser refresh (primarily for chat). Added two
+	forgotten <code>fclose</code> calls in the stats
+	code. Added <code>ml_menu</code> - initial support
+	for pull-down menus. Integrated smart text into the
+	core library. User agent now stored in the session,
+	and shown in stats.
+	</p>
+
+	<p>
+	<b>Mon Nov 25 09:31:37 GMT 2002:</b>
+	Added support for smart text, and updated widgets to
+	support it.
+	Better handling of session timeouts.
+	Fixed <code>kill_session</code> to be race-free.
+	Stats application now suports hit counts for sessions.
+	Stats application can do full symbol resolution.
+	Forms have names. Form text input fields can capture
+	focus.
+	</p>
+
+	<p>
+	<b>Sun Nov 17 23:31:32 GMT 2002:</b>
+	Debian packages. Added MSP files. Simplified the look of
+	the <code>ml_login_nopw</code> widget. Added the <code>icons</code>
+	directory. Added <code>begin work ... commit work</code>
+	around SQL scripts. Install SQL in <code>/usr/share/rws/sql/</code>
+	directory. Install so scripts in <code>/usr/share/rws/so-bin/</code>.
+	Added widget properties. Connection pooling completely
+	rewritten and simplified. Added <code>ml_die</code> function.
+	Added the ability to get the peername. Added <code>ml_heading</code>
+	widget. Added CSS for commercial widgets. <code>ml_msp</code>
+	now supports up to 5 arguments to the widget function (for chat).
+	Close button allows opener window to be reloaded.
+	Added tabbed layout widget (not working yet).
+	Added <code>ml_form_layout</code> layout widget.
+	Added <code>ml_user_directory</code> widget for bug tracker
+	(not working yet). Added iframe widget. Support
+	scroll_to for windows. Colours, tooltips, link types
+	for buttons. Added more styles. Added styling for link
+	buttons. Added <code>class</code> property for many of
+	the widgets. Added close buttons, bulletins board widget.
+	Multi-column, horizontal and vertical layout widgets.
+	Added <code>color</code> property for text label widgets.
+	Session structures are now properly locked to avoid
+	potential data corruption.
+	</p>
+
+    <p>
+      <b>Thu Nov 14 15:33:29 GMT 2002:</b> Major checkpoint release
+      for Monolith.
+    </p>
+
+    <p>
+      <b>Sun Oct 20 15:04:07 BST 2002:</b> Correct flags for
+      PCRE. Many bug fixes to MSPs. User authentication.
+      MSPs can now access the
+      database. <code>ml_bulletins</code> allows you to post
+      message, supports user authentication. Added a
+      <code>ml_close_button</code> widget to core. Dialogs
+      now support close buttons. Added <code>ml_ok_window</code>
+      and <code>ml_error_window</code>. Allow forms to change
+      their posting method. <code>ml_text_label</code> doesn't
+      crash if there is no text. <code>ml_login_nopw</code> widget.
+      Get the window ID of a window (required by the login widget).
+      Nominate a "default" main window (required by MSPs).
+      Provided a way to get at the original Host: header in
+      the request. Fixed multiple bugs in persistent database
+      handles.
+      This version now requires a version of pthrlib which was
+      compiled with DBI support.
+    </p>
+
+    <p>
+      <b>Tue Oct 15 23:40:42 BST 2002:</b> Multiple bug fixes.
+    </p>
+
+    <p>
+      <b>Sat Sep  7 16:01:14 BST 2002:</b> Packages are now
+      available as i686 binary RPMs and source RPMs.
+    </p>
+
+    <h2>Old news and old versions</h2>
+
+    <p>
+      <b>Sat Sep  7 14:48:24 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-1.0.1.tar.gz">monolith-1.0.1.tar.gz</a> released.
+      Documentation and tutorial. Fixed missing includes of
+      <string.h> (thanks to jjr-at-japo-dot-fi)
+    </p>
+
+    <p>
+      <b>Fri Aug 30 15:28:57 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-1.0.0.tar.gz">monolith-1.0.0.tar.gz</a> released.
+      Full complement of form input widgets created.
+    </p>
+
+    <p>
+      <b>Wed Aug 28 20:30:33 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-0.8.6.tar.gz">monolith-0.8.6.tar.gz</a> released.
+      This is a candidate for release as version 1.0.
+      Added framesets, removed private data in session, removed
+      explicit name parameters on form input fields.
+    </p>
+
+    <p>
+      <b>Wed Aug 28 16:11:09 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-0.8.5.tar.gz">monolith-0.8.5.tar.gz</a> released.
+      More details in the README file on how to install monolith.
+    </p>
+
+    <p>
+      <b>Wed Aug 28 15:41:50 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-0.8.4.tar.gz">monolith-0.8.4.tar.gz</a> released.
+      Support for multiple windows, improved CSS, improved support for
+      forms.
+    </p>
+
+    <p>
+      <b>Tue Aug 27 11:17:00 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-0.8.3.tar.gz">monolith-0.8.3.tar.gz</a> released.
+      This version has support for forms, and more example programs.
+    </p>
+
+    <p>
+      <b>Sat Aug 24 16:55:21 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-0.8.2.tar.gz">monolith-0.8.2.tar.gz</a> released.
+      This fixes some bugs in the button widget, finishes off the
+      <q>toy calculator</q> example, and improves the box widget.
+    </p>
+
+    <p>
+      <b>Sat Aug 24 15:13:58 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-0.8.1.tar.gz">monolith-0.8.1.tar.gz</a> released.
+      This release is slightly more substantial than the previous one.
+      It includes a few more widgets, and CSS changes to make the
+      example programs much nicer-looking.
+    </p>
+
+    <p>
+      <b>Fri Aug 23 15:00:51 BST 2002</b>
+    </p>
+
+    <p>
+      <a href="monolith-0.8.0.tar.gz">monolith-0.8.0.tar.gz</a> released.
+      This is the first basic release of the new C/C++-based monolith
+      library. It contains a single simple example program and just a
+      few basic widgets.
+    </p>
+
+<% include page_footer.msp %>
+endef
+
+upload_website:
+	scp $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-$(VERSION)-1.*.rpm \
+	$(PACKAGE)-$(VERSION).bin.tar.gz \
+	10.0.0.248:annexia.org/freeware/$(PACKAGE)/
+	scp index.html \
+	10.0.0.248:annexia.org/freeware/$(PACKAGE)/index.msp
+
+.PHONY:	build configure test upload_website

@@ -1,0 +1,205 @@
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta name="Content-Style" content="text/css">
+<title>new_ml_window</title>
+</head>
+<body>
+
+<h1 align=center>new_ml_window</h1>
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#VERSION">VERSION</a><br>
+
+<hr>
+<!-- Creator     : groff version 1.17.2 -->
+<!-- CreationDate: Sat Aug 31 18:06:12 2002 -->
+<a name="NAME"></a>
+<h2>NAME</h2>
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+new_ml_window, ml_window_pack, ml_window_set_title, ml_window_get_title, ml_window_set_stylesheet, ml_window_get_stylesheet, ml_window_set_charset, ml_window_get_charset, new_ml_frameset, ml_frameset_set_description, ml_frameset_set_title, ml_frameset_get_title - monolith window and frameset</td></table>
+<a name="SYNOPSIS"></a>
+<h2>SYNOPSIS</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<pre><b>#include &lt;ml_window.h&gt;
+
+ml_window new_ml_window (struct ml_session *, pool pool);
+void ml_window_pack (ml_window, ml_widget);
+void ml_window_set_title (ml_window, const char *title);
+const char *ml_window_get_title (ml_window);
+void ml_window_set_stylesheet (ml_window, const char *stylesheet);
+const char *ml_window_get_stylesheet (ml_window);
+void ml_window_set_charset (ml_window, const char *charset);
+const char *ml_window_get_charset (ml_window);
+ml_window new_ml_frameset (struct ml_session *, pool pool, const char *rows, const char *cols, vector frames);
+void ml_frameset_set_description (ml_window, struct ml_session *, const char *rows, const char *cols, vector frames);
+void ml_frameset_set_title (ml_window, const char *);
+const char *ml_frameset_get_title (ml_window);
+</b></pre></td></table>
+<a name="DESCRIPTION"></a>
+<h2>DESCRIPTION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+A &quot;window&quot; is a top-level window. Every
+application has at least one window, created in the main
+function. A window is just a wrapper. To actually do
+anything, you must pack a single widget inside the window.
+Windows can only take a single widget. If you want more than
+one widget to appear inside a window, then you must pack
+them into some sort of layout widget first, and pack the
+layout widget into the window.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+A &quot;frameset&quot; is used to create framesets (several
+ordinary windows packed into one top-level window, with
+independent scrolling capabilities). Windows and framesets
+are actually so similar, that I have included them in the
+same class (and also so that other code can deal with an
+opaque <b>ml_window</b> pointer and not have to worry about
+whether it is a window or a frameset). Framesets may contain
+windows or other framesets, or a mixture of
+both.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Monolith windows are not widgets (unlike many of the other
+classes in monolith).</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_window</b> creates a new monolith
+window.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_window_pack</b> packs a widget into the window. Since
+a window can only contain a single widget, subsequent calls
+to this function overwrite the packed widget. (Note: this
+call does not apply to framesets).</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_window_(set|get)_title</b> changes the title of the
+window. The title of the window defaults to no title at all,
+so it is a good idea to set this.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_window_(set|get)_stylesheet</b> changes the stylesheet
+of the page. Monolith default stylesheets are installed in
+<b>/ml-styles/</b>, and the default stylesheet is
+<b>/ml-styles/default.css</b> (supplied in the monolith
+distribution). Stylesheets are used to 'theme' monolith
+applications.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_window_(set|get)_charset</b> changes the character
+encoding associated with the window. Because of limitations
+in HTML, only a single charset can be associated with all of
+the widgets in a window. The default charset is
+<b>iso-8859-1</b>. For multilingual support, it is
+recommended that users change the charset to either their
+native language encoding, or to <b>utf-8</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>new_ml_frameset</b> creates a new frameset. <b>rows</b>
+and <b>cols</b> define the number of frames and their
+layout. You can use <b>rows</b> and <b>cols</b> to create
+frameset layouts including grids, as described in the HTML 4
+standard (<b>http://www.w3.org/TR/html401/</b>). To create
+nested framesets, use a frame which generates a frameset
+instead of a window. <b>frames</b> is a vector of <b>struct
+ml_frame_description</b> structures (note: the structures
+themselves, not pointers to the structures). <b>struct
+ml_frame_description</b> contains the following
+fields:</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>fn</b>: The function which is called generate the frame
+(or nested frameset). This function must call either
+<b>new_ml_window</b> or <b>new_ml_frameset</b>. The function
+is prototyped as <b>void fn (ml_session session, void
+*data);</b>.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>data</b>: Data pointer passed to this
+function.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_frameset_set_description</b> allows the frameset
+description to be updated.</td></table>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+<b>ml_frameset_(set|get)_title</b> updates the window
+title.</td></table>
+<a name="AUTHOR"></a>
+<h2>AUTHOR</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+Richard Jones &lt;rich@annexia.org&gt;</td></table>
+<a name="LICENSE"></a>
+<h2>LICENSE</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+GNU LGPL (see http://www.gnu.org/)</td></table>
+<a name="VERSION"></a>
+<h2>VERSION</h2>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="10%"></td><td width="90%">
+monolith-1.0.0</td></table>
+<hr>
+</body>
+</html>

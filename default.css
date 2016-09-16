@@ -1,0 +1,546 @@
+/* Default monolith stylesheet. To use this, make sure you have configured
+ * rws to map the alias /ml-styles/ to /usr/share/rws/ml-styles
+ * (or wherever this stylesheet will be installed).
+ *
+ * $Id: default.css,v 1.27 2003/01/12 22:12:41 rich Exp $
+ */
+
+/*----- GENERAL -----*/
+
+body {					/* Application background colour. */
+	background-color: white;
+}
+
+/*----- BUTTONS -----*/
+
+a.ml_button {				/* Enabled buttons. */
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+}
+
+span.ml_button {			/* Disabled buttons. */
+	text-decoration: none;
+	color: gray;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+}
+
+a.ml_button_key {			/* Enabled 'key' buttons. */
+	display: block;
+	width: 1em;
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+}
+
+span.ml_button_key {			/* Disabled 'key' buttons. */
+	display: block;
+	width: 1em;
+	text-decoration: none;
+	color: gray;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+}
+
+a.ml_button_compact {			/* Enabled 'compact' buttons. */
+	text-decoration: underline;
+	font-weight: bold;
+	color: black;
+}
+
+span.ml_button_compact {		/* Disabled 'compact' buttons. */
+	text-decoration: none;
+	color: gray;
+}
+
+a.ml_button_link {			/* Enabled 'link' buttons. */
+	text-decoration: underline;
+	font-weight: bold;
+	color: black;
+}
+
+span.ml_button_link {			/* Disabled 'link' buttons. */
+	text-decoration: none;
+	color: gray;
+}
+
+/*----- TOGGLE BUTTONS -----*/
+
+a.ml_toggle_button {			/* Toggle buttons. */
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: outset;
+	border-color: black;
+	border-width: 2;
+}
+
+a.ml_toggle_button_key {		/* Toggle 'key' buttons. */
+	display: block;
+	width: 1em;
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: outset;
+	border-color: black;
+	border-width: 2;
+}
+
+a.ml_toggle_button_pressed {		/* Toggle buttons (pressed). */
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: inset;
+	border-color: black;
+	border-width: 2;
+}
+
+a.ml_toggle_button_key_pressed {	/* Toggle 'key' buttons (pressed). */
+	display: block;
+	width: 1em;
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: inset;
+	border-color: black;
+	border-width: 2;
+}
+
+/*----- BOXES -----*/
+
+span.ml_box {				/* Box. */
+	display: block;
+	width: auto;
+	border-style: solid;
+	border-color: black;
+	border-width: thin;
+	padding: 6px 6px 6px 6px;
+	margin: 3px 3px 3px 3px;
+}
+
+/*----- FORMS -----*/
+
+input.ml_form_text {			/* Form input text field. */
+	text-decoration: none;
+	color: black;
+	background-color: #eeeeff;
+	border-style: inset;
+	border-color: black;
+	border-width: thin;
+	padding: 3px;
+}
+
+input.ml_form_password {		/* Form input password field. */
+	text-decoration: none;
+	color: black;
+	background-color: #eeeeff;
+	border-style: inset;
+	border-color: black;
+	border-width: thin;
+	padding: 3px;
+}
+
+input.ml_form_radio {			/* Form input radio button field. */
+	background-color: #eeeeff;
+}
+
+input.ml_form_checkbox {		/* Form input tick box field. */
+	background-color: #eeeeff;
+}
+
+select.ml_form_select {			/* Form input select box field. */
+	text-decoration: none;
+	color: black;
+	background-color: #eeeeff;
+//	border-style: inset;
+//	border-color: black;
+//	border-width: thin;
+//	padding: 3px;
+}
+
+textarea.ml_form_textarea {		/* Form input text field. */
+	text-decoration: none;
+	color: black;
+	background-color: #eeeeff;
+	border-style: inset;
+	border-color: black;
+	border-width: thin;
+	padding: 3px;
+}
+
+input.ml_form_submit {			/* Form submit button. */
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	background-color: white;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+}
+
+/*----- HEADINGS -----*/
+
+h1.ml_heading {				/* Heading 1. */
+	font-size: 160%;
+	font-weight: bold;
+}
+
+h2.ml_heading {				/* Heading 2. */
+	font-size: 140%;
+	font-weight: bold;
+}
+
+h3.ml_heading {				/* Heading 3. */
+	font-size: 120%;
+	font-weight: bold;
+}
+
+h4.ml_heading {				/* Heading 4. */
+	font-size: 100%;
+	font-weight: bold;
+}
+
+h5.ml_heading {				/* Heading 5. */
+	font-size: 100%;
+	font-weight: bold;
+}
+
+h6.ml_heading {				/* Heading 6. */
+	font-size: 100%;
+	font-weight: bold;
+}
+
+/*----- FORM LAYOUT -----*/
+
+table.ml_form_layout {			/* Forms. */
+}
+
+table.ml_form_layout th {		/* Forms (left col). */
+	vertical-align: top;
+	text-align: right;
+	background-color: #eeeeff;
+	padding: 3px;
+}
+
+table.ml_form_layout td {		/* Forms (right col). */
+	padding: 3px;
+}
+
+/*----- SELECT LAYOUT -----*/
+
+table.ml_select_layout {		/* Select layout (outer table). */
+}
+
+table.ml_select_layout_left {		/* Select layout (inner left table). */
+	width: 100px; /* XXX */
+}
+
+table.ml_select_layout_left th {	/* Select layout (selected item). */
+	text-align: left;
+	background-color: #eeeeff;
+	padding: 3px;
+}
+
+table.ml_select_layout_left th a {	/* Select layout (selected item). */
+	font-weight: bold;
+	text-decoration: underline;
+	color: black;
+}
+
+table.ml_select_layout_left td {	/* Select layout (unselected item). */
+	text-align: left;
+	padding: 3px;
+}
+
+table.ml_select_layout_left td a {	/* Select layout (unselected item). */
+	font-weight: bold;
+	text-decoration: underline;
+	color: black;
+}
+
+/*----- MENUS -----*/
+/* This CSS is adapted from:
+ * http://www.meyerweb.com/eric/css/edge/menus/demo.html
+ */
+
+table.ml_menubar {			/* Menubar along top of screen. */
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+	width: 100%;
+}
+
+td.ml_menubar_item {			/* Menubar headings. */
+	font-weight: bold;
+	color: black;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px
+}
+
+td.ml_menubar_item ul {			/* Disable all menus to start. */
+	display: none;
+}
+
+td.ml_menubar_item:hover > ul {		/* On hover, enable menu. */
+	display: block;
+	background: white;
+	position: absolute;
+	top: +16px;
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+}
+
+td.ml_menubar_item li:hover > ul {	/* On hover, enable submenu. */
+	display: block;
+	background: white;
+	position: absolute;
+	top: -1px;
+	left: 70%;
+	width: 6em;
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+}
+
+td.ml_menubar_item li {			/* Menu item. */
+	list-style-type: none;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px -30px;
+}
+
+//td.ml_menubar_item li:hover {		/* Menu item (hovering). */
+//	list-style-type: none;
+//	padding: 3px 12px 3px 12px;
+//	margin: 3px 3px 3px -30px;
+//	background-color: #eeeeff;
+//}
+
+td.ml_menubar_item li a {		/* Menu item (operational). */
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
+}
+
+td.ml_menubar_item li span {		/* Menu item (not operational). */
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
+}
+
+/*----- STATS APPLICATION -----*/
+
+table.ml_stats_table {			/* Tables in stats appl. */
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+	border-collapse: collapse;
+}
+
+table.ml_stats_table th {		/* Tables in stats appl. */
+	vertical-align: top;
+	background-color: #eeeeff;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	padding: 3px;
+}
+
+table.ml_stats_table td {		/* Tables in stats appl. */
+	vertical-align: top;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	padding: 3px;
+}
+
+/*----- DISCUSSION -----*/
+
+table.ml_discussion {			/* Discussion area. */
+	width: 100%;
+}
+
+table.ml_discussion_posting {		/* Discussion posting. */
+	width: 100%;
+	margin-bottom: 0.5em;
+}
+
+th.ml_discussion_posting_read {
+	text-align: left;
+	font-weight: normal;
+	background-color: #eeeeff;
+	border-style: solid;
+	border-color: black;
+	border-width: thin;
+	padding: 3px 3px 3px 3px;
+}
+
+th.ml_discussion_posting_unread {
+	text-align: left;
+	font-weight: bold;
+	background-color: #eeeeff;
+	border-style: solid;
+	border-color: black;
+	border-width: thin;
+	padding: 3px 3px 3px 3px;
+}
+
+table.ml_discussion_panel {		/* Discussion panel actions. */
+	width: 100%;
+}
+
+table.ml_discussion_panel_actions {	/* Discussion panel actions. */
+	margin-bottom: 1em;
+}
+
+/*----- CALENDAR -----*/
+
+a.ml_calendar_day {			/* Calendar day buttons. */
+	display: block;
+	width: 1.5em;
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
+
+a.ml_calendar_day_selected {		/* Calendar day buttons. */
+	display: block;
+	width: 1.5em;
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+}
+
+a.ml_calendar_day_events {		/* Calendar day buttons. */
+	display: block;
+	width: 1.5em;
+	text-decoration: none;
+	font-weight: bold;
+	color: red;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
+
+a.ml_calendar_day_events_selected {	/* Calendar day buttons. */
+	display: block;
+	width: 1.5em;
+	text-decoration: none;
+	font-weight: bold;
+	color: red;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+}
+
+a.ml_calendar_hour {			/* Calendar hour buttons. */
+	text-decoration: none;
+	font-size: small;
+	font-weight: bold;
+	color: black;
+}
+
+a.ml_calendar_hour_off_peak {		/* Calendar hour buttons (off peak). */
+	text-decoration: none;
+	font-size: small;
+	font-weight: bold;
+	color: black;
+	background-color: #eeeeff;
+}
+
+table.ml_calendar_notes {		/* Calendar notes. */
+	width: 100%;
+	align: left;
+}
+
+div.ml_calendar_notes {			/* Calendar notes. */
+	width: 100%;
+	text-align: left;
+	margin-bottom: 3pt;
+}
+
+/*----- BUG TRACKER -----*/
+
+table.ml_bugtrack_bug {			/* Bug tracking bug table. */
+	margin-bottom: 2em;
+}
+
+table.ml_bugtrack_bug th {		/* Bug tracking bug table. */
+	text-align: right;
+	background-color: #eeeeff;
+	padding: 3px;
+}
+
+table.ml_bugtrack_bug td {		/* Bug tracking bug table. */
+	padding: 3px;
+}
+
+table.ml_bugtrack_comment {		/* Bug tracking comment. */
+	width: 100%;
+	margin-bottom: 2em;
+}
+
+table.ml_bugtrack_comment th {		/* Bug tracking comment. */
+	text-align: left;
+	margin-bottom: 2em;
+}
+
+/*----- CHAT -----*/
+
+span.ml_chat_time {			/* Time field in chat window. */
+	color: blue;
+}
+
+span.ml_chat_username {			/* Username field in chat window. */
+	color: red;
+}
+
+span.ml_chat_enterleave {		/* Enter/leave msgs in chat window. */
+	font-style: italic;
+}
+
+span.ml_chat_message {			/* Message field in chat window. */
+}

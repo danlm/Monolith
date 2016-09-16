@@ -1,0 +1,33 @@
+Known bugs:
+
+* Fix bug with updating value fields on submit buttons.
+
+Desirable widgets and features:
+
+* Radios built from toggle buttons.
+
+* Tabs and tabbed panes.
+  
+* True links (looking like buttons or URLs?) [note: can be emulated now
+  using ml_button and redirects -- perhaps an ml_link_button class to
+  wrap this up?]
+  
+* Menubar, menus, menu items.
+
+* File open (this will have to have a fairly flexible VFS layer since
+  it obviously can't access local disk)
+
+* Iframe or object (?)
+
+* Fixed placement layout exposing more positioning features of CSS2
+
+* Popup menus (if these are possible)
+
+* Themes
+
+* Buttons should have: [IMG] Text (with IMG being optional) so that
+  we can style them differently if desired.
+
+* User authentication in a more integrated manner.
+
+* Update documentation to cover recent changes to the API

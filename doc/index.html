@@ -1,0 +1,1617 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>monolith documentation index</title>
+    <style type="text/css"><!--
+      h1 {
+      text-align: center;
+      }
+      pre {
+      background-color: #eeeeff;
+      }
+      code {
+      color: green;
+      font-weight: bold;
+      }
+      span.box {
+      display: block;
+      width: auto;
+      border-style: solid;
+      border-color: black;
+      border-width: thin;
+      padding: 6px 6px 6px 6px;
+      margin: 3px 3px 3px 3px;
+      }
+      --></style>
+  </head>
+
+  <body bgcolor="#ffffff">
+    <h1>monolith documentation index</h1>
+
+    <h2>What is monolith?</h2>
+
+    <p>
+      <code>monolith</code> is an application framework which
+      generates web-based applications.  It differs from existing web
+      tools because it doesn't work in terms of "pages" and "CGI
+      scripts". Instead it allows you to build applications using
+      reusable widgets (buttons, labels, etc.)  which you arrange into
+      windows. This makes it much more like building a traditional
+      application in Windows/MFC, Java/JFC, Tcl/Tk, Motif, etc.
+    </p>
+
+    <p>
+      You can also use the basic widgets to build reusable
+      "super-widgets" which you can then embed in other applications,
+      give away or sell.  An example might be a discussion system
+      "widget" which can be placed anywhere in another application.
+    </p>
+
+    <p>
+      Of course, there are limitations in the web and browsers which
+      means that you can't do everything you might do in a normal
+      application. But you can do most things.
+    </p>
+
+    <p>
+      <code>monolith</code> programs and widgets are written in C or
+      C++ (actually I've never used C++ with <code>monolith</code>,
+      but you are welcome to try).
+    </p>
+
+    <h3>CGI vs. rws's shared object scripts vs. monolith
+    applications</h3>
+
+    <p>
+      (This section is from the <code>rws</code> documentation page).
+    </p>
+
+    <p>
+      Shared object scripts are the direct analogy to CGI scripts,
+      the only difference being that CGI scripts are usually written
+      in very high level languages like Perl and PHP, and shared
+      object scripts are loaded into the server process for efficiency.
+      (Perl CGI scripts can also be loaded into the Apache
+      server process using <code>mod_perl</code>, and this is done
+      for similar reasons of efficiency).
+    </p>
+
+    <p>
+      <code>monolith</code> programs are entire applications, the sort of
+      thing which normally would be written using dozens of
+      cooperating CGI scripts. In the case of <code>monolith</code>, however,
+      the entire application compiles down to a single <code>.so</code>
+      file which happens to be (you guessed it) a shared object script.
+    </p>
+
+    <p>
+      Imagine that you are going to write yet another web-based email
+      client. For some reason you want to write this in C (please
+      don't try this at home: I wrote one in Perl at my last job and
+      that was hard enough). Here are three possible approaches
+      using C and <code>rws</code>:
+    </p>
+
+    <ol>
+      <li>
+	<p>
+	  Write forty or so shared object scripts. Each displays
+	  a single frame of the application, one might generate
+	  the frameset, a couple of dozen to implement specific
+	  operations like emptying trash or moving a message between
+	  folders.
+	</p>
+	<p>
+	  This is very much the normal way of writing CGI-based
+	  applications.
+	</p>
+      <li> Write a <code>monolith</code> application. This will probably be
+	in lots of C files, but will compile down and be linked
+	into a single <code>.so</code> file (eg. <code>email.so</code>)
+	which is dropped into the <code>so-bin</code> directory.
+      <li>
+	<p>
+	  Write a <code>monolith</code> email super-widget. This is going
+	  to exist in a shared library called
+	  <code>/usr/lib/libmyemail.so</code>
+	  with a corresponding header file defining the interface
+	  called <code>myemail.h</code>.
+	</p>
+	<p>
+	  Write a tiny <code>monolith</code> application which just instantiates
+	  a window and an email widget, and embeds the email widget
+	  in the window. This will compile into <code>email.so</code>
+	  (it'll be very tiny) which is dropped into <code>so-bin</code>.
+	</p>
+	<p>
+	  The advantage of this final approach is that you can
+	  reuse the email widget in other places, or indeed sell
+	  it to other <code>monolith</code> users.
+	</p>
+    </ol>
+
+    <p>
+      So <code>monolith</code> is good when you want to build applications
+      from widgets as you would if you were building a
+      Java/Swing, Windows MFC, gtk, Tcl/Tk graphical application.
+      It's also good if code re-use is important to you.
+      Shared object scripts are good when you are familiar with
+      CGI-based techniques to build websites.
+    </p>
+
+    <p>
+      Of course, the same <code>rws</code> server can serve
+      shared object scripts, multiple <code>monolith</code> applications,
+      flat files, and directory listings, all at the same time.
+    </p>
+
+    <h2>Compiling and installing monolith programs</h2>
+
+    <p>
+      <code>monolith</code> programs are C programs which compile into
+      <code>.so</code> files, called shared object scripts.
+      The <code>rws</code> webserver runs these directly.
+    </p>
+
+    <p>
+      To compile, probably the simplest thing to do is write a
+      Makefile which does:
+    </p>
+
+<pre>
+gcc -Wall -Werror -c prog.c -o prog.o
+gcc -shared -Wl,-soname,prog.so prog.o \
+		-lmonolithcore -lpthrlib -lc2 -lm -o prog.so
+</pre>
+
+    <p>
+      The last step generates the actual binary. Copy this into
+      <code>rws</code>'s
+      <code>/so-bin</code> directory, and make sure it is mode 0755
+      (<code>-rwxr-xr-x</code>).
+    </p>
+
+    <p>
+      To create an <code>/so-bin</code> directory, add this to your
+      <code>rws</code> hosts file:
+    </p>
+
+<pre>
+alias /so-bin/
+        path:           /path/to/your/so-bin
+        exec so:        1
+end alias
+</pre>
+
+    <p>
+      Now test it out by going to
+      <code>http://your.webserver/so-bin/prog.so</code>
+    </p>
+
+    <p>
+      If it doesn't work, here is a checklist before you email me:
+    </p>
+
+    <ul>
+      <li> Make sure you have put the above alias section into
+	the correct host file.
+      <li> <code>exec so</code> option is set?
+      <li> Restarted <code>rwsd</code>?
+      <li> Directory is world readable, executable (mode 0755)?
+      <li> Program is world readable, executable (mode 0755)?
+      <li> Any unresolved symbols (<code>ldd -r script.so</code>), apart
+	from the <code>rws_request_*</code> symbols which will be resolved
+	when the library is loaded into <code>rws</code>?
+      <li> Check the contents of your error_log file to see
+	if any error messages were reported.
+    </ul>
+
+    <p>
+      I have quite successfully used <code>gdb</code> on a running
+      server to debug and diagnose problems in <code>monolith</code> programs.
+      However note that by default <code>gdb</code> may have trouble
+      loading the symbol table for the <code>monolithcore</code>
+      library and your program. Use the <code>sharedlibrary monolith;
+      sharedlibrary script.so</code> command to load symbols instead.
+    </p>
+
+    <h2>Tutorial</h2>
+
+    <p>
+      This tutorial begins with the basics of <code>monolith</code>
+      application design, and then goes through some of the examples
+      which you will find in the <code>examples/</code> directory
+      in the source distribution.
+    </p>
+
+    <h3>A simple "hello, world" program</h3>
+
+    <p>
+      The simple "hello, world" program is useful because it
+      lets us (a) make sure our development environment is <em>really</em>
+      working, and (b) sort out the boilerplate code that every
+      <code>monolith</code> application needs. You can find
+      the full program in the source distribution as
+      <code>doc/hello.c</code>.
+    </p>
+
+    <p>
+      Start by including some necessary headers:
+    </p>
+
+<pre>
+#include &lt;pool.h&gt;
+
+#include &lt;monolith.h&gt;
+#include &lt;ml_window.h&gt;
+#include &lt;ml_text_label.h&gt;
+</pre>
+
+    <p>
+      Then there is some standard boilerplate code that needs to
+      go in (once only) into every <code>monolith</code> application.
+      You don't need to worry about what it does: it's just
+      glue between <code>rws</code>'s shared object scripts and
+      the <code>monolith</code> core code:
+    </p>
+
+<pre>
+/*----- The following standard boilerplate code must appear -----*/
+
+/* Main entry point to the app. */
+static void app_main (ml_session);
+
+int
+handle_request (rws_request rq)
+{
+  return ml_entry_point (rq, app_main);
+}
+
+/*----- End of standard boilerplate code -----*/
+</pre>
+
+    <p>
+      Then the "hello, world" program itself:
+    </p>
+
+<pre>
+static void
+app_main (ml_session session)
+{
+  pool pool = ml_session_pool (session);
+  ml_window w;
+  ml_text_label text;
+
+  /* Create the top-level window. */
+  w = new_ml_window (session, pool);
+
+  /* Create the text widget. */
+  text = new_ml_text_label (pool, "Hello, World!");
+
+  /* Pack the text widget into the window. */
+  ml_window_pack (w, text);
+}
+</pre>
+
+    <p>
+      <code>app_main</code> is the entry point into the
+      application. It has one parameter, the opaque
+      <code>ml_session</code> object, which is explained below.  Every
+      <code>monolith</code> program needs a top-level window, so we
+      create this using <code>new_ml_window(3)</code>.
+      Now we need to put something into the window, otherwise
+      it'll appear completely blank. In this case we're
+      going to put a text label widget inside this window
+      containing the familiar greeting. We have to tell the
+      window that it contains the text widget (otherwise
+      they'd be just two completely separate variables),
+      so we call <code>ml_window_pack(3)</code> to place the
+      text label inside the window.
+    </p>
+
+    <p>
+      Now you should compile and run this example
+      (in <code>doc/hello.c</code>) using the instructions
+      above and verify that it runs.
+    </p>
+
+    <h3>Design: sessions, session pools, shared data, session data</h3>
+
+    <p>
+      The <code>app_main</code> function has just one argument
+      passed to it, the opaque <code>ml_session</code> object.
+      What is this used for?
+    </p>
+
+    <p>
+      Think of a normal GUI application written in C or C++ (or
+      another language if you like). A user starts up the
+      application. The application interacts exclusively
+      with that one user. Global variables in the application
+      belong entirely to that application and that user.
+      The application continues to be used until the user
+      closes it down. We will define this process of the user
+      starting up the application, using the application and
+     then finally closing it down, as a <dfn>session</dfn>.
+    </p>
+
+    <p>
+      Web-based applications are slightly different in that
+      the same code running in the same Unix process can be
+      used by many users at the same time. For the benefit
+      of programmers, <code>monolith</code> automatically
+      keeps all of these users' sessions separate for you,
+      maintaining a different opaque <code>ml_session</code> 
+      object for each session.
+    </p>
+
+    <p>
+      One implication of this is that <code>app_main</code> is
+      called with a different <code>ml_session</code> object
+      each time, because a session only starts once. (The same
+      <i>user</i> might come back later and use the same
+      <i>application</i>, but that would be a <em>different session</em>).
+    </p>
+
+    <p>
+      So a session is different from a user. A session is also
+      different from an HTTP request. Typically during a session
+      a user might fill in a few forms, press some buttons,
+      browse through tables and so on. Each of these operations
+      probably involves an HTTP request. So in <code>monolith</code>
+      HTTP requests are very short-lived (of the order of 1ms - 1s),
+      but sessions can be quite long (hours of activity).
+    </p>
+
+    <p>
+      <code>monolith</code> allocates a separate session pool
+      for each session, and most applications are expected
+      to allocate most of their data on this session pool.
+      Of course when a user finishes their session, the session
+      pool will be deleted. This normally results in all of the
+      widgets and stuff created during the session being nuked,
+      and this is generally a good thing.
+    </p>
+
+    <p>
+      C static variables (ie. globals and variables in functions
+      declared using <code>static</code>) are shared between
+      all sessions. This can be useful under some circumstances,
+      but if what you really want is <em>persistent</em> data,
+      then you are far better off using a database of some sort
+      at the back-end. This is because static variables will
+      obviously be trashed if the <code>monolith</code> application
+      is unloaded or the webserver crashes.
+    </p>
+
+    <p>
+      <code>c2lib</code>'s <code>global_pool</code> is also
+      shared between all sessions (but don't use it directly:
+      create a subpool in your <code>_init</code> function
+      and delete the subpool in your <code>_fini</code> function).
+    </p>
+
+    <p>
+      If C static variables are shared, how do we keep a separate
+      set of variables for each session? Generally the easiest
+      way to do this is to allocate a per-session structure
+      once in <code>app_main</code> and pass it around. This
+      is called the <dfn>session data structure</dfn>. We'll
+      see this being done in example 01 below.
+    </p>
+
+    <h3>Design (for CGI programmers): what are widgets?</h3>
+
+    <p>
+      A short aside: what are widgets? If you have any experience
+      of using a traditional GUI library or GUI-builder tool, like
+      Tcl/Tk, gtk, Windows MFC, Motif, Java Swing, etc., then you'll
+      probably already know what a widget (or "control" in MS-speak) is,
+      so skip to the next section. This section is for people
+      coming from a non-graphical or purely CGI background.
+    </p>
+
+    <p>
+      In traditional GUI environments, applications are not
+      built up using pages, forms, CGI scripts and so on,
+      but are instead built up using small reusable objects
+      called widgets. A typical basic widget might be a
+      push button, a label, or an image. There are also
+      compound widgets which store other widgets inside
+      themselves. In <code>monolith</code> for example,
+      a table layout can be used to arrange other widgets
+      into a table. A table layout is itself a widget, and
+      you can use a table layout (populated with widgets inside)
+      any place you would use a basic widget. This is important
+      because complex layouts are often constructed from several
+      layers of compound and basic widgets (buttons and labels inside
+      table layouts inside other table layouts inside windows, etc.)
+    </p>
+
+    <p>
+      Here is an example form constructed using nested widgets:
+    </p>
+
+    <span class="box">
+      <i> Window </i>
+      <span class="box">
+	<i> Form </i>
+	<span class="box">
+	  <i> Table layout </i>
+    <table border="1" width="100%">
+	<tr>
+	  <td colspan="2"> <i>Label</i> </td>
+	</tr>
+	<tr>
+	  <td> <i>Label</i> </td>
+	  <td> <i>Form input</i> </td>
+	</tr>
+	<tr>
+	  <td> <i>Label</i> </td>
+	  <td> <i>Form input</i> </td>
+	</tr>
+	<tr>
+	  <td> <i>Empty</i> </td>
+	  <td> <i>Form submit</i> </td>
+	</tr>
+    </table>
+  </span>
+  </span>
+  </span>
+
+    <h3>Example 01: Label and button</h3>
+
+    <p>
+      The first example, <code>examples/01_label_and_button.c</code>,
+      is very simple. It displays a label and a button. Clicking
+      on the button increments the number on the label. Try this
+      now. Also try running it from two different browsers and
+      machines. Notice how the label starts counting up from 0
+      independently on each machine (demonstrating that each session
+      is really independent because this demo uses a session data
+      structure).
+    </p>
+
+    <p>
+      As before we begin by including some necessary headers and
+      the same boilerplate code as in our "hello, world" example
+      above. I won't repeat that here, because it's identical.
+      Then we declare our session data structure and a few private
+      functions:
+    </p>
+
+<pre>
+struct data
+{
+  ml_label lb;			/* Label. */
+  int count;			/* Count of number of button presses. */
+};
+
+static void increment (ml_session, void *);
+static void update_label (pool pool, ml_label lb, int count);
+</pre>
+
+    <p>
+      We keep (a pointer to) the label widget and the count of
+      button presses in our session data structure. In theory
+      we could keep more here, but in fact it's not necessary. These
+      are the only two variables that we need to make "global"
+      to the session, because these are the only two variables
+      which our callback function will need when it comes to
+      update the label. Our callback function is going to be
+      called when the user clicks on the button, as we'll see
+      in a moment.
+    </p>
+
+    <p>
+      The main entry point to our application is called
+      <code>app_main</code>. It's called at the beginning
+      of the session:
+    </p>
+
+<pre>
+static void
+app_main (ml_session session)
+{
+  pool pool = ml_session_pool (session);
+  struct data *data;
+  ml_window w;
+  ml_flow_layout lay;
+  ml_label lb;
+  ml_button b;
+</pre>
+
+    <p>
+      Notice that we use <code>ml_session_pool(3)</code> to get the
+      current session pool, where we are going to make all of our
+      allocations.
+    </p>
+
+    <p>
+      <code>data</code> will point to our session data structure, but
+      we have to allocate and initialise it first:
+    </p>
+
+<pre>
+  /* Create the private, per-session data area and save it in the
+   * session object.
+   */
+  data = pmalloc (pool, sizeof *data);
+  data-&gt;count = 0;
+</pre>
+
+    <p>
+      Next we create the window, label and button. We're going to
+      pack the label and button into a flow layout which is the
+      simplest sort of compound widget: it just displays the widgets
+      inside itself one after another.
+    </p>
+
+<pre>
+  /* Create the top-level window. */
+  w = new_ml_window (session, pool);
+
+  /* Create the flow layout widget which will be packed into the window. */
+  lay = new_ml_flow_layout (pool);
+
+  /* Create the label and button. */
+  data-&gt;lb = lb = new_ml_label (pool, 0);
+  update_label (pool, data-&gt;lb, 0);
+
+  b = new_ml_button (pool, "Push me!");
+  ml_button_set_callback (b, increment, session, data);
+
+  /* Pack the label and button into the flow layout widget. */
+  ml_flow_layout_pack (lay, lb);
+  ml_flow_layout_pack (lay, b);
+
+  /* Pack the flow layout widget into the window. */
+  ml_window_pack (w, lay);
+}
+</pre>
+
+    <p>
+      Notice the call to <code>ml_button_set_callback</code>. When the
+      button is pressed, the <code>increment</code> function will
+      be called like this: <code>increment (session, data)</code>.
+      (Recall that <code>data</code> is our session data pointer).
+    </p>
+
+    <p>
+      This is the definition of <code>increment</code>:
+    </p>
+
+<pre>
+static void
+increment (ml_session session, void *vp)
+{
+  struct data *data = (struct data *) vp;
+
+  update_label (ml_session_pool (session), data-&gt;lb, ++data-&gt;count);
+}
+</pre>
+
+    <p>
+      It increments <code>data-&gt;count</code> and calls
+      <code>update_label</code> which is the function which
+      actually changes the message on the label.
+    </p>
+
+    <p>
+      <code>update_label</code> is defined as:
+    </p>
+
+<pre>
+static void
+update_label (pool pool, ml_label lb, int count)
+{
+  ml_label_set_text (lb,
+		     psprintf (pool,
+			       "Button pressed: &lt;b&gt;%d&lt;/b&gt;&lt;br&gt;",
+			       count));
+}
+</pre>
+
+    <p>
+      (If you are unfamiliar with the function <code>psprintf</code>
+      then you should read the <code>c2lib</code> documentation).
+    </p>
+
+    <p>
+      That's the end of our first significant <code>monolith</code>
+      application! At around 31 lines of code, it's considerably smaller
+      than the equivalent CGI script.
+    </p>
+
+    <h3>Design: Applications and widgets</h3>
+
+    <p>
+      This section talks about one of the more fundamental
+      design considerations you need to think about when first
+      designing a new <code>monolith</code> application.
+      Namely when to build application code and when to
+      build reusable widgets.
+    </p>
+
+    <p>
+      The label and button example above is a complete
+      <code>monolith</code> application. What happens
+      however if we needed to embed this label and button
+      combo in another program (not a very likely scenario,
+      I'll admit, but let's imagine that you've developed
+      a calendar program or something else quite substantial).
+    </p>
+
+    <p>
+      The answer is to turn your application into a reusable
+      widget. Widgets are often composed of many other
+      more fundamental widgets, and in this case it is possible
+      to turn the label and button combo into a full-blown
+      widget. This widget could be used just like any of the
+      core widgets which <code>monolith</code> provides.
+    </p>
+
+    <p>
+      Turning an application into a widget isn't too hard, depending
+      on the complexity of the application itself, but it's better
+      when designing the application if you first of all work out
+      whether the application as a whole -- or parts of the
+      application -- can be designed as reusable widgets.
+    </p>
+
+    <p>
+      If you were designing a calendar program in <code>monolith</code>
+      then you might decompose the design like this:
+    </p>
+
+    <table border="1">
+	<tr>
+	  <th> Component </th>
+	  <th> Specification </th>
+	  <th> Can be used as a widget? </th>
+	</tr>
+	<tr>
+	  <td> Whole application </td>
+	  <td> Calendar: A tool for storing and tracking daily
+	    events, providing appointments, backed up in a database </td>
+	  <td> Yes. By writing the whole calendar as a reusable
+	    widget, we can include the calendar widget in an Outlook-style
+	    personal information manager (PIM). </td>
+	</tr>
+	<tr>
+	  <td> New event form </td>
+	  <td> Form which appears when the user adds a new event. </td>
+	  <td> No. Quite specific to this calendar, so reuse doesn't
+	    make much sense. </td>
+	</tr>
+	<tr>
+	  <td> Date selector </td>
+	  <td> Form input which allows the user to choose a date
+	    and automatically verifies it. </td>
+	  <td> Yes. This is applicable on many different forms in
+	    other applications. </td>
+	</tr>
+    </table>
+
+    <h3>Example 03: Toy calculators</h3>
+
+    <p>
+      Example 03 will demonstrate how to write a simple reusable
+      widget. In fact the reusable widget that we're going to write
+      is the same as the application in example 02 (not covered
+      here, but supplied with the source in the <code>examples/</code>
+      directory). So if you want you can study the process of
+      converting a whole application into a reusable widget.
+    </p>
+
+    <p>
+      The source code for example 03 is divided into three
+      files:
+    </p>
+
+    <ul>
+      <li> <code>03_many_toy_calculators.c</code> <br>
+	The application. This just instantiates four widgets
+	and displays them.
+      <li> <code>toy_calculator.h</code> <br>
+	The widget's header file. Every widget should have a
+	header file defining the external interface which
+	callers are allowed to use, and defining also the
+	opaque widget type (in this case, <code>toy_calculator</code>).
+      <li> <code>toy_calculator.c</code> <br>
+	The actual code which implements the widget.
+    </ul>
+
+    <p>
+      It's helpful at this point if you run the example. You
+      should see four calculators. Try doing some sums. Notice
+      how each calculator acts completely independently of
+      the others.
+    </p>
+
+    <p>
+      Let's start with the application code. This is very simple. It
+      just creates four toy_calculator objects and populates a
+      table layout widget with them:
+    </p>
+
+<pre>
+static void
+app_main (ml_session session)
+{
+  pool pool = ml_session_pool (session);
+  ml_window w;
+  ml_table_layout tbl;
+  toy_calculator calcs[4];
+
+  /* Create the top-level window. */
+  w = new_ml_window (session, pool);
+
+  /* Create a table layout widget to arrange the calculators. */
+  tbl = new_ml_table_layout (pool, 2, 2);
+
+  /* Create the calculators and pack them into the table layout. */
+  calcs[0] = new_toy_calculator (pool, session);
+  ml_table_layout_pack (tbl, calcs[0], 0, 0);
+  calcs[1] = new_toy_calculator (pool, session);
+  ml_table_layout_pack (tbl, calcs[1], 0, 1);
+  calcs[2] = new_toy_calculator (pool, session);
+  ml_table_layout_pack (tbl, calcs[2], 1, 0);
+  calcs[3] = new_toy_calculator (pool, session);
+  ml_table_layout_pack (tbl, calcs[3], 1, 1);
+
+  /* Pack the table into the window. */
+  ml_window_pack (w, tbl);
+}
+</pre>
+
+    <p>
+      The header file <code>toy_calculator.h</code> defines the
+      interface. It's very simple, because there's only one
+      thing you can do with a <code>toy_calculator</code> at
+      the moment, and that's create one by using the
+      <code>new_toy_calculator</code> function. Notice the
+      <a href="http://www.annexia.org/freeware/c2lib/">cdoc</a>
+      documentation in the comments.
+    </p>
+
+<pre>
+#ifndef TOY_CALCULATOR_H
+#define TOY_CALCULATOR_H
+
+#include &lt;pool.h&gt;
+#include &lt;monolith.h&gt;
+
+struct toy_calculator;
+typedef struct toy_calculator *toy_calculator;
+
+/* Function: new_toy_calculator - toy calculator widget
+ *
+ * @code{new_toy_calculator} creates a new reusable toy calculator
+ * widget.
+ */
+extern toy_calculator new_toy_calculator (pool, ml_session);
+
+#endif /* TOY_CALCULATOR_H */
+</pre>
+
+    <p>
+      The actual implementation of the <code>toy_calculator</code>
+      widget is complicated, so we'll take it step by step here.
+      However remember that if all you want to do is to <em>use</em>
+      a <code>toy_calculator</code>, then you needn't worry about
+      the implementation at all. You only need to look at the
+      header file and use it just like you would any other widget.
+    </p>
+
+    <p>
+      <code>toy_calculator.c</code> begins by including many
+      header files.
+    </p>
+
+<pre>
+#include &lt;string.h&gt;
+
+#include &lt;pool.h&gt;
+#include &lt;pstring.h&gt;
+#include &lt;pthr_cgi.h&gt;
+
+#include &lt;monolith.h&gt;
+#include &lt;ml_window.h&gt;
+#include &lt;ml_table_layout.h&gt;
+#include &lt;ml_text_label.h&gt;
+#include &lt;ml_box.h&gt;
+#include &lt;ml_button.h&gt;
+#include &lt;ml_widget.h&gt;
+
+#include "toy_calculator.h"
+</pre>
+
+    <p>
+      Every widget has an associated structure, which is where it
+      stores all its private data. For callers, the widget structure
+      is opaque (notice how it is defined in the
+      <code>toy_calculator.h</code> header file above). The
+      <code>toy_calculator</code> object we've been passing around
+      above is in fact a pointer, typedef'd to <code>struct
+      toy_calculator *</code>. (This is a common coding convention in
+      <code>c2lib</code> and <code>pthrlib</code>). In the actual
+      implementation, obviously we need to see the private members.
+    </p>
+
+    <p>
+      Moreover, every widget structure <strong>must</strong> begin
+      with a pointer to <code>struct ml_widget_operations</code>
+      because the <code>toy_calculator</code> object "inherits"
+      from the abstract base class <code>ml_widget</code>.
+    </p>
+
+    <p>
+      Here is the definition of <code>struct toy_calculator</code>:
+    </p>
+
+<pre>
+static void repaint (void *, ml_session, const char *, io_handle);
+
+struct ml_widget_operations toy_calculator_ops =
+  {
+    repaint: repaint
+  };
+
+struct toy_calculator
+{
+  struct ml_widget_operations *ops;
+  pool pool;			/* Pool for allocations. */
+  ml_text_label disp;		/* The display. */
+  char digits[16];		/* Display digits (only 10+1 used). */
+  double reg;			/* Hidden register. */
+  int op;			/* Operation: PLUS, MINUS, TIMES, DIVIDE. */
+  ml_box box;			/* The top-level box. */
+};
+</pre>
+
+    <p>
+      <code>repaint</code> is going to be the function which
+      actually draws our widget, but we'll see that a little bit
+      later.
+    </p>
+
+    <p>
+      The most important function we need to define is
+      <code>new_toy_calculator</code> which creates new
+      <code>toy_calculator</code> widgets. I won't show this
+      function in full because it's quite long (it needs to
+      create one <code>ml_button</code> object for every
+      button on the calculator, and there are 18 of them in all!).
+      But here's the important outline.
+    </p>
+
+    <p>
+      We start by allocating and initialising a new <code>struct
+      toy_calculator</code>.  A pointer to this is stored in <code>w</code>.
+    </p>
+
+<pre>
+toy_calculator
+new_toy_calculator (pool pool, ml_session session)
+{
+  toy_calculator w;
+  ml_box box;
+  ml_table_layout tbl;
+  ml_button b[18];
+  ml_text_label disp;
+
+  w = pmalloc (pool, sizeof *w);
+  w-&gt;ops = &amp;toy_calculator_ops;
+  w-&gt;pool = pool;
+  strcpy (w-&gt;digits, "0");
+  w-&gt;reg = 0;
+  w-&gt;op = 0;
+</pre>
+
+    <p>
+      Then some code creates the actual widgets contained inside
+      the calculator, the top level being a box widget:
+    </p>
+
+<pre>
+  /* Create the box surrounding the calculator. */
+  box = new_ml_box (pool);
+
+  /* A table layout widget is used to arrange the buttons and the screen.
+   * There are 6 rows, each with 4 columns.
+   */
+  tbl = new_ml_table_layout (pool, 6, 4);
+
+  /* Create the numeric buttons. */
+  b[0] = new_ml_button (pool, "0");
+  ml_button_set_callback (b[0], press_button_0, session, w);
+  ml_button_set_key (b[0], 1);
+         :      :     :
+         :      :     :
+         :      :     :
+</pre>
+
+    <p>
+      Finally we pack everything up and return the widget
+      pointer (<code>w</code>):
+    </p>
+
+<pre>
+         :      :     :
+         :      :     :
+         :      :     :
+  /* Pack the table into the box. */
+  ml_box_pack (box, tbl);
+
+  /* Save the display widget in the widget structure so that the
+   * callback functions can update it.
+   */
+  w-&gt;disp = disp;
+
+  /* Save the box, so we can repaint. */
+  w-&gt;box = box;
+
+  return w;
+}
+</pre>
+
+    <p>
+      When a button is pressed, one of the appropriate callback
+      functions is called. Because there are 18 buttons, there are
+      18 separate callback functions, but we only reproduce a few
+      here. Notice how the <code>toy_calculator</code> pointer
+      is passed as the second argument (the <code>void *</code>),
+      so we need to cast this back before using it:
+    </p>
+
+<pre>
+static void press_button_N (toy_calculator, int);
+
+static void
+press_button_0 (ml_session session, void *vw)
+{
+  toy_calculator w = (toy_calculator) vw;
+
+  press_button_N (w, 0);
+}
+
+         :      :     :
+         :      :     :
+         :      :     :
+
+static void
+press_button_N (toy_calculator w, int n)
+{
+  int len;
+
+  if (strcmp (w-&gt;digits, "0") == 0)
+    w-&gt;digits[0] = '\0';
+
+  len = strlen (w-&gt;digits);
+
+  if ((strchr (w-&gt;digits, '.') &amp;&amp; len &lt; 11) || len &lt; 10)
+    {
+      w-&gt;digits[len] = '0' + n;
+      w-&gt;digits[len+1] = '\0';
+      ml_text_label_set_text (w-&gt;disp, w-&gt;digits);
+    }
+}
+</pre>
+
+    <p>
+      Here's the callback function which runs when the [AC] button
+      is pressed:
+    </p>
+
+<pre>
+static void
+press_button_AC (ml_session session, void *vw)
+{
+  toy_calculator w = (toy_calculator) vw;
+
+  strcpy (w-&gt;digits, "0");
+  w-&gt;reg = 0;
+  ml_text_label_set_text (w-&gt;disp, "0");
+}
+</pre>
+
+    <p>
+      Finally our widget must know how to repaint (redisplay) itself.
+      <code>monolith</code> will call the repaint function at
+      the appropriate moment, and it must generate the HTML corresponding
+      to the widget. In the case of this widget, it's a compound
+      widget built up entirely out of core <code>monolith</code>
+      widgets. The top-level widget inside the calculator is the
+      box (<code>w-&gt;box</code>), so we just call the repaint
+      function for that:
+    </p>
+
+<pre>
+static void
+repaint (void *vw, ml_session session, const char *windowid, io_handle io)
+{
+  toy_calculator w = (toy_calculator) vw;
+
+  ml_widget_repaint (w-&gt;box, session, windowid, io);
+}
+</pre>
+
+    <p>
+      That's all. Our reusable toy calculator is now complete.
+    </p>
+
+    <h3>Example 06: Forms</h3>
+
+    <p>
+      Example 06 shows the various input controls available
+      when using forms. The example is straightforward, albeit
+      rather long because of the number of different controls
+      demonstrated. We begin with an unusually long list of
+      includes:
+    </p>
+
+<pre>
+#include &lt;string.h&gt;
+
+#include &lt;pool.h&gt;
+#include &lt;pstring.h&gt;
+#include &lt;pthr_cgi.h&gt;
+
+#include &lt;monolith.h&gt;
+#include &lt;ml_window.h&gt;
+#include &lt;ml_text_label.h&gt;
+#include &lt;ml_button.h&gt;
+#include &lt;ml_table_layout.h&gt;
+#include &lt;ml_flow_layout.h&gt;
+#include &lt;ml_form.h&gt;
+#include &lt;ml_form_submit.h&gt;
+#include &lt;ml_form_text.h&gt;
+#include &lt;ml_form_textarea.h&gt;
+#include &lt;ml_form_password.h&gt;
+#include &lt;ml_form_select.h&gt;
+#include &lt;ml_form_radio_group.h&gt;
+#include &lt;ml_form_radio.h&gt;
+#include &lt;ml_form_checkbox.h&gt;
+#include &lt;ml_form_textarea.h&gt;
+</pre>
+
+    <p>
+      The private session data structure contains pointers to the
+      form input widgets so that our callback functions are able
+      to read their contents:
+    </p>
+
+<pre>
+/* Private per-session data. */
+struct data
+{
+  ml_window win;
+
+  /* The form input fields themselves. */
+  ml_form_text familyname, givenname;
+  ml_form_password password;
+  ml_form_select dd, mm, yyyy;	/* Date of birth. */
+  ml_form_radio_group gender;
+  ml_form_radio m, f;		/* Gender. */
+  ml_form_checkbox eating, drinking, sleeping; /* Interests */
+  /*ml_form_file photo;            File upload, not yet implemented. */
+  ml_form_select dept;
+  ml_form_textarea comments;
+};
+</pre>
+
+    <p>
+      <code>app_main</code> allocates the session data structure
+      and calls <code>create_form</code> which actually creates
+      the initial form:
+    </p>
+
+<pre>
+static void
+app_main (ml_session session)
+{
+  pool pool = ml_session_pool (session);
+  struct data *data;
+
+  /* Create the private, per-session data area and save it in the
+   * session object.
+   */
+  data = pmalloc (pool, sizeof *data);
+
+  /* Create the top-level window. */
+  data-&gt;win = new_ml_window (session, pool);
+
+  create_form (session, data);
+}
+</pre>
+
+    <p>
+      <code>create_form</code> is quite a long, but not very
+      complex function. It creates an input control of each
+      type. Notice first the visual structure of the form:
+    </p>
+
+    <span class="box">
+      <i> Window </i>
+      <span class="box">
+	<i> Form </i>
+	<span class="box">
+	  <i> Table layout </i>
+    <table border="1" width="100%">
+	<tr>
+	  <td> <i>Label</i> </td>
+	  <td> <i>Form input</i> </td>
+	</tr>
+	<tr>
+	  <td> <i>Label</i> </td>
+	  <td> <i>Form input</i> </td>
+	</tr>
+	<tr>
+	  <td colspan="2"> <i>etc.</i> </td>
+	</tr>
+	<tr>
+	  <td> <i>Empty</i> </td>
+	  <td> <i>Form submit</i> </td>
+	</tr>
+    </table>
+  </span>
+  </span>
+  </span>
+
+    <p>
+      I will not reproduce all of the form inputs here:
+    </p>
+
+<pre>
+static void
+create_form (ml_session session, void *vp)
+{
+  pool pool = ml_session_pool (session);
+  struct data *data = (struct data *) vp;
+  ml_form form;
+  ml_table_layout tbl;
+  ml_text_label text;
+  ml_form_submit submit;
+  ml_flow_layout flow;
+  int i;
+
+  /* Create the form. */
+  form = new_ml_form (pool);
+  ml_form_set_callback (form, submit_form, session, data);
+
+  /* Create the table. */
+  tbl = new_ml_table_layout (pool, 10, 2);
+
+  /* Create the contents of the form. */
+  text = new_ml_text_label (pool, "Family name / surname");
+  ml_table_layout_pack (tbl, text, 0, 0);
+  data-&gt;familyname = new_ml_form_text (pool, form);
+  ml_table_layout_pack (tbl, data-&gt;familyname, 0, 1);
+
+         :      :     :
+         :      :     :
+         :      :     :
+
+  /* Submit button. */
+  submit = new_ml_form_submit (pool, form, "Submit");
+  ml_table_layout_pack (tbl, submit, 9, 1);
+
+  /* Pack it all up. */
+  ml_form_pack (form, tbl);
+  ml_window_pack (data-&gt;win, form);
+}
+</pre>
+
+    <p>
+      Notice that we set a callback function on the form:
+    </p>
+
+<pre>
+ml_form_set_callback (form, submit_form, session, data);
+</pre>
+
+    <p>
+      When the form is submitted by the user, <code>submit_form
+	(session, data)</code> will be called. <code>submit_form</code>,
+      reproduced next, can read the value that the user entered
+      into each form field by calling <code>ml_form_input_get_value</code>:
+    </p>
+
+<pre>
+static void
+submit_form (ml_session session, void *vp)
+{
+  pool pool = ml_session_pool (session);
+  struct data *data = (struct data *) vp;
+  ml_text_label text;
+  ml_table_layout tbl;
+  ml_button button;
+  const char *str;
+
+  str = psprintf
+    (pool,
+     "Form submitted.\n"
+     "\n"
+     "Family name: %s\n"
+     "Given name: %s\n"
+     "Password: %s\n"
+     "Date of birth: dd = %d, mm = %d, yyyy = %d\n"
+     "Gender: %s\n"
+     "   M is checked: %d  F is checked: %d\n"
+     "Interests: Eating = %d, Drinking = %d, Sleeping = %d\n"
+     "Dept fields checked: [ %s ]\n"
+     "Comments:\n"
+     "--start--\n"
+     "%s\n"
+     "--end--\n",
+     ml_form_input_get_value (data-&gt;familyname),
+     ml_form_input_get_value (data-&gt;givenname),
+     ml_form_input_get_value (data-&gt;password),
+     1 + ml_form_select_get_selection (data-&gt;dd),
+     1 + ml_form_select_get_selection (data-&gt;mm),
+     1900 + ml_form_select_get_selection (data-&gt;yyyy),
+     ml_form_input_get_value (data-&gt;gender),
+     ml_form_radio_get_checked (data-&gt;m),
+     ml_form_radio_get_checked (data-&gt;f),
+     ml_form_input_get_value (data-&gt;eating) ? 1 : 0,
+     ml_form_input_get_value (data-&gt;drinking) ? 1 : 0,
+     ml_form_input_get_value (data-&gt;sleeping) ? 1 : 0,
+     pjoin (pool,
+	    pvitostr (pool, ml_form_select_get_selections (data-&gt;dept)), ", "),
+     ml_form_input_get_value (data-&gt;comments));
+
+  tbl = new_ml_table_layout (pool, 2, 1);
+  text = new_ml_text_label (pool, str);
+  ml_table_layout_pack (tbl, text, 0, 0);
+  button = new_ml_button (pool, "Back to form");
+  ml_button_set_callback (button, create_form, session, data);
+  ml_table_layout_pack (tbl, button, 1, 0);
+
+  ml_window_pack (data-&gt;win, tbl);
+}
+</pre>
+
+    <p>
+      Notice how we have added a button called <q>Back to form</q>
+      which calls <code>create_form</code>.
+    </p>
+
+    <h3>The end of this tutorial</h3>
+
+    <p>
+      That's the end of this tutorial. You should be able to
+      go and write <code>monolith</code> applications and
+      widgets now. Full manual pages are included below.
+    </p>
+
+    <h2>The monolith class hierarchy</h2>
+
+    <p>
+      Of course <code>monolith</code> is written in C, so there are no
+      classes <i>per se</i>, but this is the general class hierarchy of
+      <code>monolith</code> widgets and windows:
+    </p>
+
+<pre>
+ml_window: window or frameset
+
+ml_session: user session
+
+ml_widget
+    |
+    |
+    +--	ml_box: draws a box around another widget
+    |
+    +--	ml_button: simple button
+    |
+    +--	ml_dialog: ask the user a question
+    |
+    +--	ml_flow_layout: layout widgets one after another
+    |
+    +--	ml_form: surrounds a collection of form inputs
+    |
+    +--	ml_form_input
+    |	    |
+    |	    |
+    |	    +--	ml_form_checkbox: checkbox (tickbox)
+    |	    |
+    |	    +--	ml_form_file: file upload input [not implemented]
+    |	    |
+    |	    +--	ml_form_password: single line password input
+    |	    |
+    |	    +--	ml_form_radio_group: group of radio buttons
+    |	    |
+    |       +--	ml_form_radio: radio button
+    |       |
+    |	    +--	ml_form_select: drop-down list of options
+    |	    |
+    |	    +--	ml_form_submit: submit button
+    |	    |
+    |	    +--	ml_form_text: single line text input
+    |	    |
+    |	    +--	ml_form_textarea: multi-line text input
+    |
+    +-- ml_image: display an icon or image
+    |
+    +-- ml_label: display arbitrary HTML
+    |
+    +-- ml_table_layout: powerful table layouts of widgets
+    |
+    +-- ml_text_label: single line or paragraphs of plain text
+    |
+    +--	ml_toggle_button: toggle button
+</pre>
+
+    <p>
+      Inheritance is faked using a technique very similar to the vtables
+      used by C++.
+    </p>
+
+    <h2>Other Notes</h2>
+
+    <h3>Can I theme monolith applications?</h3>
+
+    <p>
+      Yes, you can. At the moment, the easiest way to change the look
+      and feel is to edit the default stylesheet
+      (<code>default.css</code>). This way you can make extensive
+      changes to how your application looks from a single file.
+    </p>
+
+    <p>
+      If you don't like the idea of editing <code>default.css</code>,
+      then copy it and make your own. Call
+      <code>ml_window_set_stylesheet</code> on all your application
+      windows to point to your new stylesheet.
+    </p>
+
+    <p>
+      You can even provide different themes to different users
+      (so-called "skinning" - ugh I hate that term). Once a user has
+      logged into the app, call <code>ml_window_set_stylesheet</code>
+      with the appropriate theme for that user.
+    </p>
+
+    <h3>Frames considered harmful</h3>
+
+    <p>
+      Although <code>monolith</code> supports frames and pop-up
+      windows, care should be taken because these do not work in
+      the way that most users expect.
+    </p>
+
+    <p>
+      The problem arises when one frame tries to update the state
+      of another frame (the same problem applies to two separate
+      windows, but I'll just use the generic term "frame" here).
+      For example, imagine the following simple frameset:
+    </p>
+
+    <table border="1">
+	<tr>
+	  <td style="width: 100px">
+	    <p><i>Left frame</i></p>
+	    <p>[Button 1]</p>
+	    <p>[Button 2]</p>
+	    <p>[Button 3]</p>
+	  </td>
+	  <td style="width: 200px" valign="top">
+	    <p><i>Right frame</i></p>
+	  </td>
+	</tr>
+    </table>
+
+    <p>
+      It's common to want the buttons in the left hand frame to
+      change the contents displayed in the right hand frame, and
+      a naive way to do this would be to set the callback for
+      each button to a function like this:
+    </p>
+
+<pre>
+static void
+update_right_frame (ml_session session, void *vp)
+{
+  /* Get private per-session data. */
+  struct data *data = (struct data *) vp;
+
+  pool pool = ml_session_pool (session);
+
+  ml_text_label label = new_ml_text_label (pool, <i>updated content</i>);
+
+  /* Change the contents of the right hand frame. */
+  ml_window_pack (data-&gt;right_frame, label);
+}
+</pre>
+
+    <p>
+      The problem is that this doesn't work at all. Pressing the
+      buttons will not update the right hand frame.
+    </p>
+
+    <p>
+      For seasoned HTML programmers, it will be obvious why this
+      happens. For people used to traditional application development,
+      it is confusing and seems like a bug.
+    </p>
+
+    <p>
+      In future, we will add features to Monolith to allow careful
+      developers to use frames in situations such as above. However
+      at the moment, the advice is:
+    </p>
+
+    <ol>
+      <li> Consider each frame/window/pop-up to be a completely
+	separate entity, almost like a separate session. Don't
+	expect that updating properties in another frame/window/pop-up
+	will work (it almost certainly will have no effect).
+      <li> Avoid using framesets if possible. Table layouts are
+	often a better substitute.
+    </ol>
+
+    <h3>Notes on forms</h3>
+
+    <p>
+      You cannot nest forms. (This is a limitation of HTML.)
+    </p>
+
+    <p>
+      If you have several forms on the same page, you can
+      run into problems. A common problem happens when you
+      have two forms on the same dialog like this:
+    </p>
+
+    <table border="1">
+	<tr>
+	  <td>
+	    <i>First form</i><br>
+	    [ --- input #1 --- ] [submit]
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    <i>Second form</i><br>
+	    [ --- input #2 --- ] [submit]
+	  </td>
+	</tr>
+    </table>
+
+    <p>
+      If the user types something in input field #1, then types
+      something in input field #2, and presses the second submit
+      button, then the contents of input field #1 will disappear.
+    </p>
+
+    <p>
+      To avoid this, either only use one form on a dialog, or design
+      your dialogs so that it is clear that the first submit button
+      must be pressed after filling out the first form.
+    </p>
+
+    <p>
+      Another problem with forms (and again, a limitation of HTML)
+      is that they are not interactive. The server cannot read the
+      value of a form input field until the [Submit] button has
+      been pressed.
+    </p>
+
+    <p>
+      If you are using forms, then only use form input widgets
+      inside them. Toggle buttons and so on are not form input
+      widgets, and cannot be part of a form.
+    </p>
+
+    <h2>Links to manual pages</h2>
+
+    <ul>
+      <li> <a href="ml_box_pack.3.html"><code>ml_box_pack(3)</code></a> </li>
+      <li> <a href="ml_button_get_text.3.html"><code>ml_button_get_text(3)</code></a> </li>
+      <li> <a href="ml_button_set_callback.3.html"><code>ml_button_set_callback(3)</code></a> </li>
+      <li> <a href="ml_button_set_key.3.html"><code>ml_button_set_key(3)</code></a> </li>
+      <li> <a href="ml_button_set_text.3.html"><code>ml_button_set_text(3)</code></a> </li>
+      <li> <a href="ml_dialog_add_button.3.html"><code>ml_dialog_add_button(3)</code></a> </li>
+      <li> <a href="ml_dialog_clear_buttons.3.html"><code>ml_dialog_clear_buttons(3)</code></a> </li>
+      <li> <a href="ml_dialog_get_icon.3.html"><code>ml_dialog_get_icon(3)</code></a> </li>
+      <li> <a href="ml_dialog_get_text.3.html"><code>ml_dialog_get_text(3)</code></a> </li>
+      <li> <a href="ml_dialog_get_title.3.html"><code>ml_dialog_get_title(3)</code></a> </li>
+      <li> <a href="ml_dialog_set_icon.3.html"><code>ml_dialog_set_icon(3)</code></a> </li>
+      <li> <a href="ml_dialog_set_text.3.html"><code>ml_dialog_set_text(3)</code></a> </li>
+      <li> <a href="ml_dialog_set_title.3.html"><code>ml_dialog_set_title(3)</code></a> </li>
+      <li> <a href="ml_entry_point.3.html"><code>ml_entry_point(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_clear.3.html"><code>ml_flow_layout_clear(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_erase.3.html"><code>ml_flow_layout_erase(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_get.3.html"><code>ml_flow_layout_get(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_insert.3.html"><code>ml_flow_layout_insert(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_pack.3.html"><code>ml_flow_layout_pack(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_pop_back.3.html"><code>ml_flow_layout_pop_back(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_pop_front.3.html"><code>ml_flow_layout_pop_front(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_push_back.3.html"><code>ml_flow_layout_push_back(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_push_front.3.html"><code>ml_flow_layout_push_front(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_replace.3.html"><code>ml_flow_layout_replace(3)</code></a> </li>
+      <li> <a href="ml_flow_layout_size.3.html"><code>ml_flow_layout_size(3)</code></a> </li>
+      <li> <a href="ml_form_input_clear_value.3.html"><code>ml_form_input_clear_value(3)</code></a> </li>
+      <li> <a href="ml_form_input_get_value.3.html"><code>ml_form_input_get_value(3)</code></a> </li>
+      <li> <a href="ml_form_input_set_value.3.html"><code>ml_form_input_set_value(3)</code></a> </li>
+      <li> <a href="ml_form_radio_get_checked.3.html"><code>ml_form_radio_get_checked(3)</code></a> </li>
+      <li> <a href="ml_form_radio_group_pack.3.html"><code>ml_form_radio_group_pack(3)</code></a> </li>
+      <li> <a href="ml_form_radio_set_checked.3.html"><code>ml_form_radio_set_checked(3)</code></a> </li>
+      <li> <a href="ml_form_select_clear.3.html"><code>ml_form_select_clear(3)</code></a> </li>
+      <li> <a href="ml_form_select_erase.3.html"><code>ml_form_select_erase(3)</code></a> </li>
+      <li> <a href="ml_form_select_get.3.html"><code>ml_form_select_get(3)</code></a> </li>
+      <li> <a href="ml_form_select_get_multiple.3.html"><code>ml_form_select_get_multiple(3)</code></a> </li>
+      <li> <a href="ml_form_select_get_selection.3.html"><code>ml_form_select_get_selection(3)</code></a> </li>
+      <li> <a href="ml_form_select_get_selections.3.html"><code>ml_form_select_get_selections(3)</code></a> </li>
+      <li> <a href="ml_form_select_get_size.3.html"><code>ml_form_select_get_size(3)</code></a> </li>
+      <li> <a href="ml_form_select_insert.3.html"><code>ml_form_select_insert(3)</code></a> </li>
+      <li> <a href="ml_form_select_pop_back.3.html"><code>ml_form_select_pop_back(3)</code></a> </li>
+      <li> <a href="ml_form_select_pop_front.3.html"><code>ml_form_select_pop_front(3)</code></a> </li>
+      <li> <a href="ml_form_select_push_back.3.html"><code>ml_form_select_push_back(3)</code></a> </li>
+      <li> <a href="ml_form_select_push_front.3.html"><code>ml_form_select_push_front(3)</code></a> </li>
+      <li> <a href="ml_form_select_replace.3.html"><code>ml_form_select_replace(3)</code></a> </li>
+      <li> <a href="ml_form_select_set_multiple.3.html"><code>ml_form_select_set_multiple(3)</code></a> </li>
+      <li> <a href="ml_form_select_set_selection.3.html"><code>ml_form_select_set_selection(3)</code></a> </li>
+      <li> <a href="ml_form_select_set_selections.3.html"><code>ml_form_select_set_selections(3)</code></a> </li>
+      <li> <a href="ml_form_select_set_size.3.html"><code>ml_form_select_set_size(3)</code></a> </li>
+      <li> <a href="ml_form_select_size.3.html"><code>ml_form_select_size(3)</code></a> </li>
+      <li> <a href="ml_frameset_get_title.3.html"><code>ml_frameset_get_title(3)</code></a> </li>
+      <li> <a href="ml_frameset_set_description.3.html"><code>ml_frameset_set_description(3)</code></a> </li>
+      <li> <a href="ml_frameset_set_title.3.html"><code>ml_frameset_set_title(3)</code></a> </li>
+      <li> <a href="ml_image_get_src.3.html"><code>ml_image_get_src(3)</code></a> </li>
+      <li> <a href="ml_image_set_src.3.html"><code>ml_image_set_src(3)</code></a> </li>
+      <li> <a href="ml_label_get_text.3.html"><code>ml_label_get_text(3)</code></a> </li>
+      <li> <a href="ml_label_set_text.3.html"><code>ml_label_set_text(3)</code></a> </li>
+      <li> <a href="ml_register_action.3.html"><code>ml_register_action(3)</code></a> </li>
+      <li> <a href="ml_session_args.3.html"><code>ml_session_args(3)</code></a> </li>
+      <li> <a href="ml_session_canonical_path.3.html"><code>ml_session_canonical_path(3)</code></a> </li>
+      <li> <a href="ml_session_pool.3.html"><code>ml_session_pool(3)</code></a> </li>
+      <li> <a href="ml_session_script_name.3.html"><code>ml_session_script_name(3)</code></a> </li>
+      <li> <a href="ml_session_sessionid.3.html"><code>ml_session_sessionid(3)</code></a> </li>
+      <li> <a href="ml_table_layout_pack.3.html"><code>ml_table_layout_pack(3)</code></a> </li>
+      <li> <a href="ml_table_layout_set_align.3.html"><code>ml_table_layout_set_align(3)</code></a> </li>
+      <li> <a href="ml_table_layout_set_colspan.3.html"><code>ml_table_layout_set_colspan(3)</code></a> </li>
+      <li> <a href="ml_table_layout_set_rowspan.3.html"><code>ml_table_layout_set_rowspan(3)</code></a> </li>
+      <li> <a href="ml_table_layout_set_valign.3.html"><code>ml_table_layout_set_valign(3)</code></a> </li>
+      <li> <a href="ml_text_label_set_font_size.3.html"><code>ml_text_label_set_font_size(3)</code></a> </li>
+      <li> <a href="ml_text_label_set_font_weight.3.html"><code>ml_text_label_set_font_weight(3)</code></a> </li>
+      <li> <a href="ml_text_label_set_text.3.html"><code>ml_text_label_set_text(3)</code></a> </li>
+      <li> <a href="ml_text_label_set_text_align.3.html"><code>ml_text_label_set_text_align(3)</code></a> </li>
+      <li> <a href="ml_unregister_action.3.html"><code>ml_unregister_action(3)</code></a> </li>
+      <li> <a href="ml_widget_repaint.3.html"><code>ml_widget_repaint(3)</code></a> </li>
+      <li> <a href="ml_window_get_charset.3.html"><code>ml_window_get_charset(3)</code></a> </li>
+      <li> <a href="ml_window_get_stylesheet.3.html"><code>ml_window_get_stylesheet(3)</code></a> </li>
+      <li> <a href="ml_window_get_title.3.html"><code>ml_window_get_title(3)</code></a> </li>
+      <li> <a href="ml_window_pack.3.html"><code>ml_window_pack(3)</code></a> </li>
+      <li> <a href="ml_window_set_charset.3.html"><code>ml_window_set_charset(3)</code></a> </li>
+      <li> <a href="ml_window_set_stylesheet.3.html"><code>ml_window_set_stylesheet(3)</code></a> </li>
+      <li> <a href="ml_window_set_title.3.html"><code>ml_window_set_title(3)</code></a> </li>
+      <li> <a href="new_ml_box.3.html"><code>new_ml_box(3)</code></a> </li>
+      <li> <a href="new_ml_button.3.html"><code>new_ml_button(3)</code></a> </li>
+      <li> <a href="new_ml_dialog.3.html"><code>new_ml_dialog(3)</code></a> </li>
+      <li> <a href="new_ml_flow_layout.3.html"><code>new_ml_flow_layout(3)</code></a> </li>
+      <li> <a href="new_ml_form.3.html"><code>new_ml_form(3)</code></a> </li>
+      <li> <a href="new_ml_form_checkbox.3.html"><code>new_ml_form_checkbox(3)</code></a> </li>
+      <li> <a href="new_ml_form_password.3.html"><code>new_ml_form_password(3)</code></a> </li>
+      <li> <a href="new_ml_form_radio.3.html"><code>new_ml_form_radio(3)</code></a> </li>
+      <li> <a href="new_ml_form_radio_group.3.html"><code>new_ml_form_radio_group(3)</code></a> </li>
+      <li> <a href="new_ml_form_select.3.html"><code>new_ml_form_select(3)</code></a> </li>
+      <li> <a href="new_ml_form_submit.3.html"><code>new_ml_form_submit(3)</code></a> </li>
+      <li> <a href="new_ml_form_text.3.html"><code>new_ml_form_text(3)</code></a> </li>
+      <li> <a href="new_ml_form_textarea.3.html"><code>new_ml_form_textarea(3)</code></a> </li>
+      <li> <a href="new_ml_frameset.3.html"><code>new_ml_frameset(3)</code></a> </li>
+      <li> <a href="new_ml_image.3.html"><code>new_ml_image(3)</code></a> </li>
+      <li> <a href="new_ml_label.3.html"><code>new_ml_label(3)</code></a> </li>
+      <li> <a href="new_ml_table_layout.3.html"><code>new_ml_table_layout(3)</code></a> </li>
+      <li> <a href="new_ml_text_label.3.html"><code>new_ml_text_label(3)</code></a> </li>
+      <li> <a href="new_ml_window.3.html"><code>new_ml_window(3)</code></a> </li>
+    </ul>
+
+    <hr>
+    <address><a href="mailto:rich@annexia.org">Richard Jones</a></address>
+<!-- Created: Wed May  1 19:36:16 BST 2002 -->
+<!-- hhmts start -->
+Last modified: Sat Sep  7 14:45:50 BST 2002
+<!-- hhmts end -->
+  </body>
+</html>

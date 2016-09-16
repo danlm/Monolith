@@ -1,0 +1,52 @@
+body {					/* Application background colour. */
+	background-color: white;
+}
+
+thead.ml_tabbed_layout_tabs tr th a {
+	display: block;
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 3px 3px 3px;
+	margin: 3px -8px 3px -8px;
+	border-top-style: solid;
+	border-color: #b2b2b2;
+	border-width: thin;
+}
+
+thead.ml_tabbed_layout_tabs tr td a {
+	display: block;
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 3px 2px 3px;
+	margin: 3px -8px 3px -8px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-color: #b2b2b2;
+	border-width: thin;
+}
+
+div.ml_tabbed_layout_body {
+	color: black;
+	padding: 3px 3px 3px 3px;
+	margin: -6px 3px 3px 3px;
+	border-style: none solid solid solid;
+	border-color: #b2b2b2;
+	border-width: thin;
+}
+
+
+
+
+a.ml_button {				/* Enabled buttons. */
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	padding: 3px 12px 3px 12px;
+	margin: 3px 3px 3px 3px;
+	border-style: outset;
+	border-color: black;
+	border-width: thin;
+}
+
